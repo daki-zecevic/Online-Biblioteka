@@ -1,0 +1,53 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background: #2d3d4e;
+  color: white;
+  position: fixed;
+  transition: width 0.3s;
+  padding: 20px 0;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.toggle-btn {
+  background: #3a4d5e;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 20px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.sidebar-header {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid #3a4d5e;
+  margin-bottom: 20px;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.menu-items {
+  padding: 0 10px;
+}
+
+.menu-item {
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.menu-item:hover {
+  background: #3a4d5e;
+}
