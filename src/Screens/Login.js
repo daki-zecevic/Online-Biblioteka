@@ -1,51 +1,53 @@
 import React, { useState } from 'react';
-import '../Styles/Login.css'; 
-
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
+
+    const response = await fetch('https://biblioteka.simonovicp.com/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        device: 'web'
+      })
+    });
     
-    if(email === 'bibliotekar@cortex.com' && password === 'password') {
-      const success = {
-        success: true,
-        data: {
-          token: "2|cNQB0oo0oGSeImijyh0Hv2DSrN1sHA7Q8cuhnsYX",
-          name: "ucenik-123"
-        },
-        message: "User login successfully."
-      };
-      
-      localStorage.setItem('authToken', success.data.token);
-      localStorage.setItem('username', success.data.name);
-      window.location.href = '/dashboard';
-    } else {
-      const fail = { 
-        success: false,
-        message: "Unauthorized.",
-        data: {
-          error: "Invalid login credentials. Please try again."
-        }
-      };
-      setError(fail.data.error);
+
+    const data = await response.json();
+
+    if (!data.success) {
+     
+      setError('Invalid login credentials. Please try again.');
+        setLoading(false); 
+      return;
     }
-    setLoading(false);
+
+    localStorage.setItem('authToken', data.data.token);
+    localStorage.setItem('username', data.data.name);
+      setLoading(false); 
+    window.location.href = '/dashboard'; 
   };
 
-  return (
+   return (
     <div className="login-container">
       <div className="login-box">
         <h1 className="login-title">Login</h1>
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
-            <label className="input-label">Email</label>
+            <label className="input-label">Username</label>
             <input
-              type="email"  value={email}  onChange={(e) => setEmail(e.target.value)} placeholder="example@example.net"  className="login-input" required />
+              type="text"  value={username}  onChange={(e) => setUsername(e.target.value)} placeholder="Username"  className="login-input" required />
           </div>
           <div className="form-group">
             <label className="input-label">Password</label>
@@ -59,7 +61,7 @@ const Login = () => {
           </button>
         </form>
         <div className="login-footer">
-          <a href="/create-account" className="create-account">CREATE ACCOUNT</a>
+          <a href="/register" className="create-account">CREATE ACCOUNT</a>
           <div className="copyright">©2025 ICT Cortex. All rights reserved.</div>
         </div>
       </div>

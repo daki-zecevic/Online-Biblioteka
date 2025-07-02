@@ -37,7 +37,7 @@ const Register = () => {
         navigate('/login');
       } else {
         setMessage(data.message || 'An error occurred.');
-      }
+      }  
     } catch {
       setMessage('Error connecting to the server.');
     }

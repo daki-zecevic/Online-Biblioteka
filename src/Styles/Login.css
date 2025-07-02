@@ -8,7 +8,7 @@ html, body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url('https://i.pinimg.com/736x/23/44/7c/23447cf2d17d6962783578c82c11b3b7.jpg');
+  background-image: url("../Resources/Background.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
