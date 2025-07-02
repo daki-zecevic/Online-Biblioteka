@@ -16,32 +16,33 @@ const Register = () => {
   const [message, setMessage] = useState('');
 
   const handleRegister = async () => {
-    if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match!");
-      return;
+  if (formData.password !== formData.confirmPassword) {
+    setMessage("Passwords do not match!");
+    return;
+  }
+
+  try {
+    const res = await fetch('https://biblioteka.simonovicp.com/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': 'b3Rvcmlub2xhcmluZ29sb2dpamE='
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setMessage(data.message);
+      navigate('/login');
+    } else {
+      setMessage(data.message || 'An error occurred.');
     }
-
-    try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setMessage(data.message);
-        navigate('/login');
-      } else {
-        setMessage(data.message || 'An error occurred.');
-      }
-    } catch {
-      setMessage('Error connecting to the server.');
-    }
-  };
+  } catch {
+    setMessage('Error connecting to the server.');
+  }
+};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
