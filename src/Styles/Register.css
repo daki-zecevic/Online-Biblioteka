@@ -1,0 +1,126 @@
+body {
+    background-image: url("../Resources/Background.jpg");
+}
+
+.background-white {
+    background-color: white;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+
+.p{
+    font-size: 12px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+
+
+input {
+    border: rgb(172, 172, 172) 1px solid;
+    border-radius: 4px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    
+}
+
+input:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+input:focus {
+    border: rgba(51, 146, 234) 1px solid ;
+}
+
+.button {
+    background-color: rgba(51, 146, 234, 1);
+    color: white;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    border-radius: 4px;
+    border: rgb(131, 131, 131) 1px solid;
+}
+
+.button:hover {
+    background-color: rgba(51, 146, 234, 0.9);
+}
+
+.button-white {
+    background-color: white;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    border: rgb(131, 131, 131) 1px solid;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+}
+
+.button-white:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.align-center {
+    text-align: center;
+}
+
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.margin {
+    margin: auto;
+}
+
+.m-t-5 {
+    margin-top: 5px;
+}
+
+.m-t-10 {
+    margin-top: 10px;
+}
+
+.m-t-20 {
+    margin-top: 20px;
+}
+
+.m-t-150{
+    margin-top: 150px;
+}
+
+.p-10 {
+    padding: 10px;
+}
+
+.p-20 {
+    padding: 20px;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.w-75 {
+    width: 75%;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.w-25 {
+    width: 25%;
+}
+
+
+
