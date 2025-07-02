@@ -29,9 +29,6 @@ input:hover {
     background-color: rgb(245, 245, 245);
 }
 
-input:focus {
-    border: rgba(51, 146, 234) 1px solid ;
-}
 
 .button {
     background-color: rgba(51, 146, 234, 1);
