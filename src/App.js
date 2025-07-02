@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './Screens/Register.jsx';
 import Login from './Screens/Login.js';
+import Dashboard from './Dashboard/Dashboard.jsx';
 import './Styles/Register.css';
 import './Styles/Login.css';
 
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Register />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
