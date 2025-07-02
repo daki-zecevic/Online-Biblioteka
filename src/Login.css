@@ -1,0 +1,125 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url('https://i.pinimg.com/736x/23/44/7c/23447cf2d17d6962783578c82c11b3b7.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+   margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9); 
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px); 
+}
+
+.login-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.login-input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.forgot-password {
+  text-align: right;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  padding: 0.8rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.login-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.create-account {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.create-account:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  color: #777;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
