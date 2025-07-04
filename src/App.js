@@ -5,7 +5,7 @@ import Login from './Screens/Login.js';
 import Dashboard from './Dashboard/Dashboard.jsx';
 import './Styles/Register.css';
 import './Login.css';
-
+import './Styles/fonts.css';
 function App() {
   return (
     <BrowserRouter>
