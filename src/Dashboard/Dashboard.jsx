@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from './komponente/Sidebar.jsx';
 import NavBar from './komponente/NavBar.jsx';
-import DashboardContent from './DashboardContent';
+import { Outlet } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -10,7 +10,7 @@ const Dashboard = () => {
       <Sidebar />
       <div className="main-content">
         <NavBar />
-        <DashboardContent />
+        <Outlet /> {}
       </div>
     </div>
   );
