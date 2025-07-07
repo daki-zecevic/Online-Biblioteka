@@ -54,7 +54,7 @@ const Bibliotekari = () => {
     <div className="bibliotekari-container">
       <div className="bibliotekari-header">
 
-        <button className="add-btn" onClick={() => navigate('/dashboard/bibliotekari/novi')}>
+        <button className="add-btn" onClick={() => navigate('/dashboard/bibliotekari/n')}>
           + NOVI BIBLIOTEKAR
         </button>
         <input type="text" placeholder="Search..." className="search-input" />
