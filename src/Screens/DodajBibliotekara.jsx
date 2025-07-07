@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/BibliotekarForma.css';
 
 const DodajBibliotekara = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     ime: '',
     prezime: '',
@@ -17,6 +18,21 @@ const DodajBibliotekara = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  
+  const [slika, setSlika] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setSlika(URL.createObjectURL(file));
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -27,24 +43,43 @@ const DodajBibliotekara = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ovde možete poslati podatke backendu
     console.log('Forma poslata:', formData);
   };
 
   return (
     <div className="dodaj-bibliotekara-container">
       <div className="form-header">
-        <p className="breadcrumbs">Svi Bibliotekari / Novi Bibliotekar</p>
         <h2>Novi Bibliotekar</h2>
+        <p className="breadcrumbs">Svi Bibliotekari / Novi Bibliotekar</p>
       </div>
 
       <form className="bibliotekar-form" onSubmit={handleSubmit}>
         <div className="photo-upload">
-          <div className="photo-box">
-            <div className="photo-preview">
-              <span>🖼️</span>
-              <p>Add photo</p>
-            </div>
+          <div className="photo-box" onClick={handleImageClick}>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleImageChange}
+            />
+            {slika ? (
+              <img
+                src={slika}
+                alt="Preview"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderRadius: '8px'
+                }}
+              />
+            ) : (
+              <div className="photo-preview">
+                <span style={{ fontSize: '30px' }}>🖼️</span>
+                <p>Add photo</p>
+              </div>
+            )}
           </div>
         </div>
 
