@@ -6,56 +6,56 @@ import { useNavigate } from 'react-router';
 const dummyData = [
   {
     id: 1,
-    name: 'Valentina Kascelan',
-    email: 'valentina.kascelan@domain.net',
-    type: 'Bibliotekar',
+    name: 'Mika Milic',
+    email: 'mika.milic@domain.net',
+    type: 'Ucenik',
     lastAccess: 'Prije 10 sati',
-    avatar: 'https://i.pravatar.cc/40?img=1',
+    avatar: 'https://i.pravatar.cc/40?img=47',
   },
   {
     id: 2,
-    name: 'Tarik Zaimovic',
-    email: 'tarik.zaimovic@domain.net',
-    type: 'Bibliotekar',
+    name: 'Pero Perovic',
+    email: 'pero.perovic@domain.net',
+    type: 'Ucenik',
     lastAccess: 'Prije 2 dana',
-    avatar: 'https://i.pravatar.cc/40?img=2',
+    avatar: 'https://i.pravatar.cc/40?img=53',
   },
   {
     id: 3,
-    name: 'Test Akontacijevic',
-    email: 'test.akontijevic@domain.net',
-    type: 'Bibliotekar',
+    name: 'Zaim Zaimovic',
+    email: 'zaim.zaimovic@domain.net',
+    type: 'Ucenik',
     lastAccess: 'Nije se nikad ulogovao',
-    avatar: 'https://i.pravatar.cc/40?img=3',
+    avatar: 'https://i.pravatar.cc/40?img=58',
   },
   {
     id: 4,
-    name: 'Darko Kascelan',
-    email: 'darko.kascelan@domain.net',
-    type: 'Bibliotekar',
+    name: 'Nikola Nikolic',
+    email: 'nikola.nikolic@domain.net',
+    type: 'Ucenik',
     lastAccess: 'Prije 2 nedelje',
-    avatar: 'https://i.pravatar.cc/40?img=4',
+    avatar: 'https://i.pravatar.cc/40?img=52',
   },
   {
     id: 5,
-    name: 'Marko Markovic',
-    email: 'marko.markovic@domain.net',
-    type: 'Bibliotekar',
+    name: 'Marijana Marijanov',
+    email: 'marijana.marijanov@domain.net',
+    type: 'Ucenik',
     lastAccess: 'Prije 3 dana',
-    avatar: 'https://i.pravatar.cc/40?img=5',
+    avatar: 'https://i.pravatar.cc/40?img=48',
   },
 ];
 
 
 
-const Bibliotekari = () => {
+const Ucenici = () => {
   const navigate = useNavigate();
   return (
     <div className="bibliotekari-container">
       <div className="bibliotekari-header">
 
-        <button className="add-btn" onClick={() => navigate('/dashboard/bibliotekari/novi')}>
-          + NOVI BIBLIOTEKAR
+        <button className="add-btn" onClick={() => navigate('/dashboard/ucenici/novi')}>
+          + NOVI UCENIK
         </button>
         <input type="text" placeholder="Search..." className="search-input" />
       </div>
@@ -97,4 +97,4 @@ const Bibliotekari = () => {
   );
 };
 
-export default Bibliotekari;
+export default Ucenici;

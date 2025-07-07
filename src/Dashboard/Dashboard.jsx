@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from './komponente/Sidebar.jsx';
 import NavBar from './komponente/NavBar.jsx';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import './Dashboard.css';
 
 const Dashboard = () => {

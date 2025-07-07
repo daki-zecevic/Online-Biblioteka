@@ -6,6 +6,8 @@ import Dashboard from './Dashboard/Dashboard.jsx';
 import Bibliotekari from './Screens/Bibliotekari.jsx';
 import DashboardContent from './Dashboard/DashboardContent.jsx'; 
 import DodajBibliotekara from './Screens/DodajBibliotekara.jsx';
+import Ucenici from './Screens/Ucenici.jsx';
+import DodavanjeUcenika from './Screens/DodavanjeUcenika.jsx';
 import './Styles/Register.css';
 import './Login.css';
 import './Styles/fonts.css';
@@ -23,6 +25,8 @@ function App() {
           <Route index element={<DashboardContent />} /> {}
           <Route path="bibliotekari" element={<Bibliotekari />} />
           <Route path="bibliotekari/n" element={<DodajBibliotekara />} />
+          <Route path="ucenici" element={<Ucenici />} />
+          <Route path="/dashboard/ucenici/novi" element={<DodavanjeUcenika />} />
         </Route>
       </Routes>
     </BrowserRouter>

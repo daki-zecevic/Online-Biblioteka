@@ -49,7 +49,6 @@ const Register = () => {
         setMessage(data.message || "Registration successful!");
         navigate('/login');
       } else {
-        // Ako postoji validaciona greska na email polju, posebno obavestenje
         if (data.errors && data.errors.email) {
           if (data.errors.email.includes("Polje email već postoji.")) {
             setMessage("Email je već zauzet, molimo koristite drugi.");
@@ -58,7 +57,6 @@ const Register = () => {
         }
 
         if (data.errors) {
-          // Prikazi prvu gresku iz errors objekta
           const firstError = Object.values(data.errors)[0][0];
           setMessage(firstError);
         } else if (data.error) {
@@ -118,10 +116,10 @@ const Register = () => {
             <label htmlFor={name}>{label}</label>
           </div>
         ))}
-
+        <div>
         <button onClick={handleRegister} className="m-t-20 p-10 border button">REGISTER</button>
         <button onClick={handleLogin} className="m-t-20 p-10 button-white">RETURN TO LOGIN</button>
-
+        </div>
         {message && <p className="m-t-20">{message}</p>}
 
         <p className="m-t-20 p">©2025 ICT Cortex. All rights reserved</p>
