@@ -1,0 +1,154 @@
+body, html {
+  background: #e5e5e5 !important;
+}
+
+.admin-detalji-container {
+  background: #e5e5e5;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.gornji-bar {
+  background: #fff;
+  padding: 24px 32px 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.gornji-bar h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.breadcrumbs {
+  color: #1976d2;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.akcije {
+  display: flex;
+  gap: 12px;
+}
+
+.akcije button {
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.akcije button:hover {
+  background: #f1f3f5;
+}
+
+.admin-info-kartica {
+  background: #fff;
+  margin: 32px auto 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  display: flex;
+  padding: 32px 48px;
+  max-width: 600px;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.admin-slika {
+  min-width: 120px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-slika img {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e0e0e0;
+}
+
+.admin-podaci {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 1.08rem;
+}
+
+.admin-podaci p {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.admin-podaci strong {
+  min-width: 140px;
+  font-weight: 500;
+  color: #333;
+  display: inline-block;
+}
+
+.admin-podaci a {
+  color: #1976d2;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.admin-podaci a:hover {
+  text-decoration: underline;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #fff;
+  padding: 28px 36px;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+  text-align: center;
+}
+
+.modal-dugmad {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  gap: 18px;
+}
+
+.modal-dugmad button {
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 6px 18px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.modal-dugmad button:hover {
+  background: #f1f3f5;
+}

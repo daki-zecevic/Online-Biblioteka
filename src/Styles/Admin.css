@@ -72,3 +72,26 @@
   font-size: 15px;
   color: #555;
 }
+.admin-menu {
+  position: absolute;
+  right: 0;
+  top: 25px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+.admin-menu button {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.admin-menu button:hover {
+  background: #f0f0f0;
+}
