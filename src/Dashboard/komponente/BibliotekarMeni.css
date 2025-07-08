@@ -1,0 +1,38 @@
+.bibliotekar-meni {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 4px 0;
+  z-index: 100;
+  width: 220px;
+  font-family: sans-serif;
+}
+
+.bibliotekar-meni button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.bibliotekar-meni button:hover {
+  background-color: #f5f5f5;
+}
+
+.bibliotekar-meni button svg {
+  width: 18px;
+  height: 18px;
+  color: #555;
+}

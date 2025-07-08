@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../Styles/Bibliotekari.css';
 import { useNavigate } from 'react-router';
-
+import BibliotekarMeni from '../Dashboard/komponente/BibliotekarMeni';
 
 const dummyData = [
   {
@@ -46,14 +46,41 @@ const dummyData = [
   },
 ];
 
-
-
 const Bibliotekari = () => {
   const navigate = useNavigate();
+  const [bibliotekari, setBibliotekari] = useState([]);
+  const [openMeniId, setOpenMeniId] = useState(null);
+  const meniRef = useRef(null);
+
+  // Klik izvan menija zatvara ga
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (meniRef.current && !meniRef.current.contains(e.target)) {
+        setOpenMeniId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Učitavanje dummy + localStorage podataka
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem('bibliotekari')) || [];
+    const formatted = localData.map((b, index) => ({
+      id: dummyData.length + index + 1,
+      name: `${b.ime} ${b.prezime}`,
+      email: b.email,
+      type: 'Bibliotekar',
+      lastAccess: 'Nije se nikad ulogovao',
+      avatar: b.slika || 'https://i.pravatar.cc/40?u=random'
+    }));
+
+    setBibliotekari([...dummyData, ...formatted]);
+  }, []);
+
   return (
     <div className="bibliotekari-container">
       <div className="bibliotekari-header">
-
         <button className="add-btn" onClick={() => navigate('/dashboard/bibliotekari/n')}>
           + NOVI BIBLIOTEKAR
         </button>
@@ -72,18 +99,34 @@ const Bibliotekari = () => {
           </tr>
         </thead>
         <tbody>
-          {dummyData.map((user) => (
-            <tr key={user.id}>
-              <td><input type="checkbox" /></td>
-              <td className="name-cell">
-                <img src={user.avatar} alt={user.name} className="avatar" />
-                {user.name}
-              </td>
-              <td>{user.email}</td>
-              <td>{user.type}</td>
-              <td>{user.lastAccess}</td>
-              <td><span className="menu-dots">⋮</span></td>
-            </tr>
+          {bibliotekari.map((user) => (
+            <React.Fragment key={user.id}>
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td className="name-cell">
+                  <img src={user.avatar} alt={user.name} className="avatar" />
+                  {user.name}
+                </td>
+                <td>{user.email}</td>
+                <td>{user.type}</td>
+                <td>{user.lastAccess}</td>
+                <td style={{ position: 'relative' }}>
+                  <button
+                    className="menu-dots"
+                    onClick={() =>
+                      setOpenMeniId((prev) => (prev === user.id ? null : user.id))
+                    }
+                  >
+                    ⋮
+                  </button>
+                  {openMeniId === user.id && (
+                    <div ref={meniRef} className="menu-wrapper">
+                      <BibliotekarMeni onClose={() => setOpenMeniId(null)} />
+                    </div>
+                  )}
+                </td>
+              </tr>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

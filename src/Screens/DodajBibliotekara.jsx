@@ -42,9 +42,33 @@ const DodajBibliotekara = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Forma poslata:', formData);
+  e.preventDefault();
+
+ 
+  if (formData.sifra !== formData.ponoviSifru) {
+    alert('Šifre se ne poklapaju!');
+    return;
+  }
+
+  
+  const prethodni = JSON.parse(localStorage.getItem('bibliotekari')) || [];
+
+  
+  const noviBibliotekar = {
+    ...formData,
+    slika: slika 
   };
+
+  
+  localStorage.setItem(
+    'bibliotekari',
+    JSON.stringify([...prethodni, noviBibliotekar])
+  );
+
+  
+  navigate('/dashboard/bibliotekari');
+};
+
 
   return (
     <div className="dodaj-bibliotekara-container">
