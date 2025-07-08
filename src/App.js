@@ -8,6 +8,7 @@ import DashboardContent from './Dashboard/DashboardContent.jsx';
 import DodajBibliotekara from './Screens/DodajBibliotekara.jsx';
 import Ucenici from './Screens/Ucenici.jsx';
 import DodavanjeUcenika from './Screens/DodavanjeUcenika.jsx';
+import UcenikDetails from './Screens/UcenikDetails.jsx';
 import Admin from './Screens/Admin.jsx';
 import NoviAdmin from './Screens/NoviAdmin.jsx';
 import AdminPrikaz from './Screens/AdminPrikaz.jsx';
@@ -30,6 +31,7 @@ function App() {
           <Route path="bibliotekari/n" element={<DodajBibliotekara />} />
           <Route path="ucenici" element={<Ucenici />} />
           <Route path="/dashboard/ucenici/novi" element={<DodavanjeUcenika />} />
+          <Route path="/dashboard/ucenici/view/:id" element={<UcenikDetails />} />
           <Route path="admin" element={<Admin />} />
           <Route path="admin/n" element={<NoviAdmin />} />
           <Route path="admin/prikaz/:id" element={<AdminPrikaz />} />
