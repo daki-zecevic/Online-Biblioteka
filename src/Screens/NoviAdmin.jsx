@@ -131,86 +131,113 @@ const NoviAdmin = () => {
           </div>
         </div>
 
-       <input
-  type="text"
-  name="name" 
-  placeholder="Unesite ime.."
-  value={formData.name}
-  onChange={handleChange}
-/>
-{errors.name && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.name}</div>}
+        <div className="floating-label-group">
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder=" "
+            value={formData.name}
+            onChange={handleChange}
+          />
+          <label htmlFor="name">Ime</label>
+          {errors.name && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.name}</div>}
+        </div>
 
-<input
-  type="text"
-  name="surname" 
-  placeholder="Unesite prezime.."
-  value={formData.surname}
-  onChange={handleChange}
-/>
-{errors.surname && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.surname}</div>}
+        <div className="floating-label-group">
+          <input
+            type="text"
+            name="surname"
+            id="surname"
+            placeholder=" "
+            value={formData.surname}
+            onChange={handleChange}
+          />
+          <label htmlFor="surname">Prezime</label>
+          {errors.surname && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.surname}</div>}
+        </div>
 
-<input
-  type="text"
-  name="jmbg"
-  placeholder="Unesite JMBG.."
-  value={formData.jmbg}
-  onChange={handleChange}
-/>
-{errors.jmbg && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.jmbg}</div>}
+        <div className="floating-label-group">
+          <input
+            type="text"
+            name="jmbg"
+            id="jmbg"
+            placeholder=" "
+            value={formData.jmbg}
+            onChange={handleChange}
+          />
+          <label htmlFor="jmbg">JMBG</label>
+          {errors.jmbg && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.jmbg}</div>}
+        </div>
 
-<input
-  type="email"
-  name="email"
-  placeholder="Unesite E-mail.."
-  value={formData.email}
-  onChange={handleChange}
-/>
-{errors.email && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.email}</div>}
+        <div className="floating-label-group">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder=" "
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <label htmlFor="email">E-mail</label>
+          {errors.email && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.email}</div>}
+        </div>
 
-<input
-  type="text"
-  name="username" 
-  placeholder="Unesite korisničko ime.."
-  value={formData.username}
-  onChange={handleChange}
-/>
-{errors.username && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.username}</div>}
+        <div className="floating-label-group">
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder=" "
+            value={formData.username}
+            onChange={handleChange}
+          />
+          <label htmlFor="username">Korisničko ime</label>
+          {errors.username && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.username}</div>}
+        </div>
 
-        <div className="password-wrapper">
+        <div className="floating-label-group password-wrapper">
           <input
             type={showPassword ? 'text' : 'password'}
             name="password"
-            placeholder="Unesite željenu šifru.."
+            id="password"
+            placeholder=" "
             value={formData.password}
             onChange={handleChange}
           />
+          <label htmlFor="password">Šifra</label>
           <button
             type="button"
             className="toggle-password"
+            tabIndex={-1}
             onClick={() => setShowPassword(!showPassword)}
           >
             👁️
           </button>
+          {errors.password && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.password}</div>}
         </div>
-         {errors.password && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.password}</div>}
 
-        <div className="password-wrapper">
+        <div className="floating-label-group password-wrapper">
           <input
             type={showConfirm ? 'text' : 'password'}
             name="password_confirmation"
-            placeholder="Ponovi unesite šifru.."
+            id="password_confirmation"
+            required
+            placeholder=" "
             value={formData.password_confirmation}
             onChange={handleChange}
           />
+          <label htmlFor="password_confirmation">Ponovite šifru</label>
           <button
             type="button"
             className="toggle-password"
+            tabIndex={-1}
             onClick={() => setShowConfirm(!showConfirm)}
           >
             👁️
           </button>
+          {errors.password_confirmation && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.password_confirmation}</div>}
         </div>
-         {errors.password_confirmation && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.password_confirmation}</div>}
 
         <div className="form-buttons">
           <button type="submit" className="sacuvaj-btn">✓ SAČUVAJ</button>
