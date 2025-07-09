@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../Styles/PrikazAdmin.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminPrikaz = () => {
   const { id } = useParams();
@@ -8,11 +10,13 @@ const AdminPrikaz = () => {
 
   const [admin, setAdmin] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem('authToken');
 
   useEffect(() => {
     const fetchAdmin = async () => {
+      setLoading(true);
       try {
         const response = await fetch(`https://biblioteka.simonovicp.com/api/users/${id}`, {
           headers: {
@@ -23,7 +27,9 @@ const AdminPrikaz = () => {
         const data = await response.json();
         setAdmin(data.data || data);
       } catch (error) {
-        console.error('Greška pri dohvatanju admina:', error);
+        toast.error('Greška pri dohvatanju admina.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -31,6 +37,7 @@ const AdminPrikaz = () => {
   }, [id, token]);
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`https://biblioteka.simonovicp.com/api/users/${id}`, {
         method: 'DELETE',
@@ -40,25 +47,46 @@ const AdminPrikaz = () => {
       });
 
       if (response.ok) {
-        alert('Admin uspješno obrisan!');
-        navigate('/dashboard/admin');
+        toast.success('Admin uspješno obrisan!');
+        setTimeout(() => {
+          navigate('/dashboard/admin');
+        }, 1200);
       } else {
-        alert('Greška pri brisanju admina.');
+        toast.error('Greška pri brisanju admina.');
       }
     } catch (error) {
-      alert('Greška pri povezivanju sa serverom.');
+      toast.error('Greška pri povezivanju sa serverom.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!admin) return <div>Učitavanje...</div>;
+  if (!admin || loading) return (
+    <div>
+      <ToastContainer position="top-center" />
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <span>Sačekajte...</span>
+        </div>
+      )}
+      {!loading && <div>Učitavanje...</div>}
+    </div>
+  );
 
   return (
     <div className="admin-detalji-container">
+      <ToastContainer position="top-center" />
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <span>Sačekajte...</span>
+        </div>
+      )}
       <div className="gornji-bar">
         <h2>{`${admin.name || ''} ${admin.surname || admin.surename || ''}`}</h2>
         <p className="breadcrumbs">Svi Admini / ID-{admin.id}</p>
         <div className="akcije">
-          <button onClick={() => navigate(`/dashboard/admin/edit/${admin.id}`)}>✎ Izmjeni podatke</button>
           <button onClick={() => setShowModal(true)}>🗑️ Izbriši Admina</button>
         </div>
       </div>

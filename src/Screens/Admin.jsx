@@ -1,32 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import '../Styles/Admin.css';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Admin = () => {
   const [admins, setAdmins] = useState([]);
-  const [menuOpenId, setMenuOpenId] = useState(null); // ID admina za koji je meni otvoren
+  const [menuOpenId, setMenuOpenId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAdmins = async () => {
+      setLoading(true); 
       const token = localStorage.getItem('authToken');
-      const response = await fetch('https://biblioteka.simonovicp.com/api/users?role=admin', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setAdmins(data.data);
+      try {
+        const response = await fetch('https://biblioteka.simonovicp.com/api/users?role=admin', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setAdmins(data.data);
+        } else {
+          toast.error('Greška pri učitavanju admina.');
+        }
+      } catch (error) {
+        toast.error('Greška pri povezivanju sa serverom.');
+      } finally {
+        setLoading(false); 
       }
     };
     fetchAdmins();
   }, []);
 
-  
   const handleMenuClick = (id) => {
     setMenuOpenId(menuOpenId === id ? null : id);
   };
@@ -50,11 +61,12 @@ const Admin = () => {
         setAdmins(admins.filter(a => a.id !== selectedAdmin.id));
         setShowModal(false);
         setSelectedAdmin(null);
+        toast.success('Admin uspješno izbrisan!');
       } else {
-        alert('Greška pri brisanju admina.');
+        toast.error('Greška pri brisanju admina.');
       }
     } catch (error) {
-      alert('Greška pri povezivanju sa serverom.');
+      toast.error('Greška pri povezivanju sa serverom.');
     }
   };
 
@@ -68,6 +80,13 @@ const Admin = () => {
 
   return (
     <div className="bibliotekari-container">
+      <ToastContainer position="top-center" />
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <span>Sačekajte...</span>
+        </div>
+      )}
       <div className="bibliotekari-header">
         <button className="add-btn" onClick={handleAddAdmin}>
           + NOVI ADMIN
