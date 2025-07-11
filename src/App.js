@@ -27,14 +27,13 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        {}
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route index element={<DashboardContent />} /> {}
+          <Route index element={<DashboardContent />} />
           <Route path="bibliotekari" element={<Bibliotekari />} />
           <Route path="bibliotekari/n" element={<DodajBibliotekara />} />
           <Route path="ucenici" element={<Ucenici />} />
-          <Route path="/dashboard/ucenici/novi" element={<DodavanjeUcenika />} />
-          <Route path="/dashboard/ucenici/view/:id" element={<UcenikDetails />} />
+          <Route path="ucenici/novi" element={<DodavanjeUcenika />} /> 
+          <Route path="ucenici/view/:id" element={<UcenikDetails />} /> 
           <Route path="admin" element={<Admin />} />
           <Route path="admin/n" element={<NoviAdmin />} />
           <Route path="admin/prikaz/:id" element={<AdminPrikaz />} />

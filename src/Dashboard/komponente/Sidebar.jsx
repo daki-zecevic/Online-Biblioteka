@@ -1,40 +1,47 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { 
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  GraduationCap,
+  PenSquare,
+  RefreshCw,
+  Menu
+} from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
-
-  const menuItems = [
-    { path: '/dashboard', icon: '📊', text: 'Dashboard' },
-    { path: '/dashboard/bibliotekari', icon: '👨‍💼', text: 'Bibliotekari' },
-    { path: '/dashboard/knjige', icon: '📚', text: 'Knjige' },
-    { path: '/dashboard/ucenici', icon: '👦', text: 'Učenici' },
-    { path: '/dashboard/autori', icon: '✍️', text: 'Autori' },
-    { path: '/dashboard/izdavanje', icon: '🔄', text: 'Izdavanje' }
+const Sidebar = ({ isCollapsed, toggleSidebar }) => {
+  const navItems = [
+    { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
+    { path: "/dashboard/librarians", label: "Bibliotekari", icon: <Users size={20} /> },
+    { path: "/dashboard/books", label: "Knjige", icon: <BookOpen size={20} /> },
+    { path: "/dashboard/students", label: "Učenici", icon: <GraduationCap size={20} /> },
+    { path: "/dashboard/authors", label: "Autori", icon: <PenSquare size={20} /> },
+    { path: "/dashboard/checkout", label: "Izdavanje", icon: <RefreshCw size={20} /> }
   ];
 
   return (
-    <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
-      <button 
-        className="toggle-btn"
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {collapsed ? '>' : '<'}
-      </button>
+    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      <div className="sidebar-header">
+        <button className="toggle-btn" onClick={toggleSidebar}>
+          <Menu size={20} />
+        </button>
+        {!isCollapsed && <span className="logo-text">Online Biblioteka</span>}
+      </div>
       
       <nav className="sidebar-nav">
-        {menuItems.map((item, index) => (
-          <NavLink 
-            key={index}
+        {navItems.map((item) => (
+          <NavLink
+            key={item.path}
             to={item.path}
-            end
             className={({ isActive }) => 
               `nav-item ${isActive ? 'active' : ''}`
             }
+            data-tooltip={isCollapsed ? item.label : null}
           >
             <span className="nav-icon">{item.icon}</span>
-            {!collapsed && <span className="nav-text">{item.text}</span>}
+            {!isCollapsed && <span className="nav-text">{item.label}</span>}
           </NavLink>
         ))}
       </nav>

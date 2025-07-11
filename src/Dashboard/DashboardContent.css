@@ -4,6 +4,13 @@
    margin-top: 20px;
 }
 
+.dashboard-users-list,
+.dashboard-status-chart {
+   position: static;
+
+}
+
+
 .dashboard-users-list {
    flex: 1.5;
    background: white;
@@ -119,4 +126,3 @@
    font-size: 14px;
    color: #2E3A4E;
 }
-
