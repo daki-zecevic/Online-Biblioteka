@@ -1,0 +1,196 @@
+.loading-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.loading-spinner {
+  border: 4px solid #eee;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.knjiga-detalji-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+}
+
+.gornji-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+.gornji-bar h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+.breadcrumbs {
+  color: #888;
+  font-size: 0.95rem;
+  margin-left: 20px;
+}
+.akcije button {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.akcije button:hover {
+  background: #217dbb;
+}
+
+/* Info card */
+.knjiga-info-kartica {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+.knjiga-slika img {
+  width: 160px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+.knjiga-podaci {
+  flex: 1;
+  font-size: 1.1rem;
+}
+.knjiga-podaci p {
+  margin: 10px 0;
+}
+.knjiga-podaci strong {
+  color: #3498db;
+  font-weight: 500;
+}
+.knjiga-detalji-container {
+  max-width: 100%;
+  margin: 0;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+}
+.gornji-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+.gornji-bar h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+.breadcrumbs {
+  color: #888;
+  font-size: 0.95rem;
+  margin-left: 20px;
+}
+.akcije button {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.akcije button:hover {
+  background: #217dbb;
+}
+.tab-bar {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eee;
+}
+.tab-bar button {
+  background: none;
+  border: none;
+  font-size: 1.08rem;
+  color: #3498db;
+  padding: 12px 0 10px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+.tab-bar .tab-active {
+  color: #217dbb;
+  border-bottom: 2.5px solid #3498db;
+  font-weight: 600;
+}
+.knjiga-info-kartica {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+.knjiga-slika img {
+  width: 160px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+.knjiga-podaci {
+  flex: 1;
+  font-size: 1.1rem;
+}
+.knjiga-podaci p {
+  margin: 10px 0;
+}
+.knjiga-podaci strong {
+  color: #3498db;
+  font-weight: 500;
+}
+.knjiga-status {
+  min-width: 180px;
+  font-size: 1.08rem;
+  margin-left: 24px;
+}
+.status-green { color: #27ae60; font-weight: 600; }
+.status-orange { color: #e67e22; font-weight: 600; }
+.status-blue { color: #3498db; font-weight: 600; }
+.status-red { color: #e74c3c; font-weight: 600; }
+.status-gray { color: #888; font-weight: 600; }
+.knjiga-specifikacija p { margin: 10px 0; }
+.multimedia-upload {
+  border: 1px dashed #bbb;
+  border-radius: 8px;
+  padding: 24px 18px;
+  background: #f7fafd;
+  min-height: 120px;
+  width: 100%;
+  margin-bottom: 18px;
+}
+.multimedia-preview img {
+  border-radius: 6px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}

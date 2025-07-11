@@ -12,6 +12,9 @@ import UcenikDetails from './Screens/UcenikDetails.jsx';
 import Admin from './Screens/Admin.jsx';
 import NoviAdmin from './Screens/NoviAdmin.jsx';
 import AdminPrikaz from './Screens/AdminPrikaz.jsx';
+import Knjige from './Screens/Knjige.jsx';
+import NovaKnjiga from './Screens/NovaKnjiga.jsx';
+import KnjigaPrikaz from './Screens/KnjigaPrikaz.jsx';
 import './Styles/Register.css';
 import './Login.css';
 import './Styles/fonts.css';
@@ -35,6 +38,9 @@ function App() {
           <Route path="admin" element={<Admin />} />
           <Route path="admin/n" element={<NoviAdmin />} />
           <Route path="admin/prikaz/:id" element={<AdminPrikaz />} />
+          <Route path="knjige" element={<Knjige />} />
+          <Route path="knjige/n" element={<NovaKnjiga />} />
+          <Route path="knjige/prikaz/:id" element={<KnjigaPrikaz />} />
         </Route>
       </Routes>
     </BrowserRouter>
