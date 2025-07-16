@@ -17,8 +17,6 @@ const DodajBibliotekara = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
-  
   const [slika, setSlika] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -41,34 +39,47 @@ const DodajBibliotekara = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
- 
-  if (formData.sifra !== formData.ponoviSifru) {
-    alert('Šifre se ne poklapaju!');
-    return;
-  }
+    if (formData.sifra !== formData.ponoviSifru) {
+      alert('Šifre se ne poklapaju!');
+      return;
+    }
 
-  
-  const prethodni = JSON.parse(localStorage.getItem('bibliotekari')) || [];
+    const payload = {
+      ime: formData.ime,
+      prezime: formData.prezime,
+      jmbg: formData.jmbg,
+      email: formData.email,
+      korisnickoIme: formData.korisnickoIme,
+      lozinka: formData.sifra,
+      uloga: 'Bibliotekar',
+    };
 
-  
-  const noviBibliotekar = {
-    ...formData,
-    slika: slika 
+    try {
+      const response = await fetch('https://library-api-k5b6.onrender.com/users/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Greška prilikom slanja zahteva.');
+      }
+
+      const data = await response.json();
+      console.log('Uspešno dodat:', data);
+
+      alert('Bibliotekar uspešno dodat!');
+      navigate('/dashboard/bibliotekari');
+    } catch (error) {
+      console.error(error);
+      alert('Došlo je do greške prilikom dodavanja bibliotekara.');
+    }
   };
-
-  
-  localStorage.setItem(
-    'bibliotekari',
-    JSON.stringify([...prethodni, noviBibliotekar])
-  );
-
-  
-  navigate('/dashboard/bibliotekari');
-};
-
 
   return (
     <div className="dodaj-bibliotekara-container">
@@ -101,7 +112,7 @@ const DodajBibliotekara = () => {
             ) : (
               <div className="photo-preview">
                 <span style={{ fontSize: '30px' }}>🖼️</span>
-                <p>Add photo</p>
+                <p>Dodaj fotografiju</p>
               </div>
             )}
           </div>
@@ -113,6 +124,7 @@ const DodajBibliotekara = () => {
           placeholder="Unesite ime.."
           value={formData.ime}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -121,6 +133,7 @@ const DodajBibliotekara = () => {
           placeholder="Unesite prezime.."
           value={formData.prezime}
           onChange={handleChange}
+          required
         />
 
         <select disabled>
@@ -133,6 +146,7 @@ const DodajBibliotekara = () => {
           placeholder="Unesite JMBG.."
           value={formData.jmbg}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -141,6 +155,7 @@ const DodajBibliotekara = () => {
           placeholder="Unesite E-mail.."
           value={formData.email}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -149,15 +164,17 @@ const DodajBibliotekara = () => {
           placeholder="Unesite korisničko ime.."
           value={formData.korisnickoIme}
           onChange={handleChange}
+          required
         />
 
         <div className="password-wrapper">
           <input
             type={showPassword ? 'text' : 'password'}
             name="sifra"
-            placeholder="Unesite željenu šifru.."
+            placeholder="Unesite šifru.."
             value={formData.sifra}
             onChange={handleChange}
+            required
           />
           <button
             type="button"
@@ -172,9 +189,10 @@ const DodajBibliotekara = () => {
           <input
             type={showConfirm ? 'text' : 'password'}
             name="ponoviSifru"
-            placeholder="Ponovi unesite šifru.."
+            placeholder="Ponovo unesite šifru.."
             value={formData.ponoviSifru}
             onChange={handleChange}
+            required
           />
           <button
             type="button"
@@ -190,7 +208,7 @@ const DodajBibliotekara = () => {
           <button
             type="button"
             className="ponisti-btn"
-            onClick={() => navigate('/Dashboard/Bibliotekari')}
+            onClick={() => navigate('/dashboard/bibliotekari')}
           >
             ✗ PONIŠTI
           </button>

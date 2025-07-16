@@ -52,7 +52,7 @@ const Bibliotekari = () => {
   const [openMeniId, setOpenMeniId] = useState(null);
   const meniRef = useRef(null);
 
-  // Klik izvan menija zatvara ga
+ 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (meniRef.current && !meniRef.current.contains(e.target)) {
@@ -63,7 +63,7 @@ const Bibliotekari = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Učitavanje dummy + localStorage podataka
+ 
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem('bibliotekari')) || [];
     const formatted = localData.map((b, index) => ({
