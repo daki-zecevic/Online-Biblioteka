@@ -1,15 +1,14 @@
-import React from 'react';
+import React from "react";
 import './PotvrdiBrisanje.css';
 
-const PotvrdiBrisanje = ({ onConfirm, onCancel, korisnik }) => {
+const PotvrdiBrisanje = ({ poruka, onPotvrdi, onOtkazi }) => {
   return (
-    <div className="brisanje-overlay">
-      <div className="brisanje-modal">
-        <h3>Da li ste sigurni?</h3>
-        <p>Želite obrisati bibliotekara <strong>{korisnik.name}</strong>?</p>
-        <div className="brisanje-buttons">
-          <button className="otkazi-btn" onClick={onCancel}>Otkaži</button>
-          <button className="obrisi-btn" onClick={onConfirm}>Obriši</button>
+    <div className="potvrdi-brisanje-overlay">
+      <div className="potvrdi-brisanje-modal">
+        <p>{poruka}</p>
+        <div className="dugmad">
+          <button onClick={onPotvrdi} className="potvrdi">Da</button>
+          <button onClick={onOtkazi} className="otkazi">Ne</button>
         </div>
       </div>
     </div>
