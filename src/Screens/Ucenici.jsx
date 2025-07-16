@@ -80,7 +80,7 @@ const Ucenici = () => {
   return (
     <div className="bibliotekari-container">
       <div className="bibliotekari-header">
-        <button className="add-btn" onClick={() => navigate('/dashboard/ucenici/novi')}>
+        <button className="add-btn-U" onClick={() => navigate('/dashboard/ucenici/novi')}>
           + NOVI UCENIK
         </button>
         <input type="text" placeholder="Search..." className="search-input" />

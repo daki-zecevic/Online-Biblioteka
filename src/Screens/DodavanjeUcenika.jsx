@@ -1,40 +1,47 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import '../Styles/DodavanjeUcenika.css';
 
 const DodavanjeUcenika = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
   const [formData, setFormData] = useState({
     ime: '',
     prezime: '',
-    uloga: 'Ucenik',
     jmbg: '',
     email: '',
     korisnickoIme: '',
     lozinka: '',
-    potvrdaLozinke: '',
+    potvrdaLozinke: ''
   });
 
   const [focused, setFocused] = useState({});
+  const [errors, setErrors] = useState({});
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const token = localStorage.getItem('authToken'); // Koristi token iz localStorage
+  const token = localStorage.getItem('authToken');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const handleFocus = (name) => {
-    setFocused(prev => ({ ...prev, [name]: true }));
+    setFocused((prev) => ({ ...prev, [name]: true }));
   };
 
   const handleBlur = (name) => {
-    setFocused(prev => ({ ...prev, [name]: false }));
+    setFocused((prev) => ({ ...prev, [name]: false }));
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current.click();
   };
 
   const handleImageChange = (e) => {
@@ -46,33 +53,37 @@ const DodavanjeUcenika = () => {
   };
 
   const getWrapperClass = (name) =>
-    `input-wrapper ${(focused[name] || formData[name]) ? 'floating-label-visible' : ''}`;
+    `input-wrapper ${(focused[name] || formData[name]) ? 'floating-label-visible' : ''} ${errors[name] ? 'input-error' : ''}`;
 
-  const handleSubmit = async () => {
-    const {
-      ime, prezime, jmbg, email, korisnickoIme, lozinka, potvrdaLozinke
-    } = formData;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
 
-    if (!ime || !prezime || !jmbg || !email || !korisnickoIme || !lozinka || !potvrdaLozinke) {
-      alert('Molimo popunite sva polja.');
-      return;
+    if (!formData.ime.trim()) newErrors.ime = 'Morate unijeti ime!';
+    if (!formData.prezime.trim()) newErrors.prezime = 'Morate unijeti prezime!';
+    if (!formData.jmbg.trim()) newErrors.jmbg = 'Morate unijeti JMBG!';
+    if (!formData.email.trim()) newErrors.email = 'Morate unijeti email!';
+    if (!formData.korisnickoIme.trim()) newErrors.korisnickoIme = 'Morate unijeti korisničko ime!';
+    if (!formData.lozinka.trim()) newErrors.lozinka = 'Morate unijeti lozinku!';
+    if (!formData.potvrdaLozinke.trim()) {
+      newErrors.potvrdaLozinke = 'Morate ponovo unijeti lozinku!';
+    } else if (formData.lozinka !== formData.potvrdaLozinke) {
+      newErrors.potvrdaLozinke = 'Lozinke se ne poklapaju!';
     }
 
-    if (lozinka !== potvrdaLozinke) {
-      alert('Lozinka i potvrda lozinke se ne poklapaju.');
-      return;
-    }
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
 
     const data = new FormData();
-    data.append('role_id', formData.uloga === 'Ucenik' ? 2 : 1);
-    data.append('name', ime);
-    data.append('surname', prezime);
-    data.append('jmbg', jmbg);
-    data.append('email', email);
-    data.append('username', korisnickoIme);
-    data.append('password', lozinka);
-    data.append('password_confirmation', potvrdaLozinke);
-
+    data.append('role_id', 2);
+    data.append('name', formData.ime);
+    data.append('surname', formData.prezime);
+    data.append('jmbg', formData.jmbg);
+    data.append('email', formData.email);
+    data.append('username', formData.korisnickoIme);
+    data.append('password', formData.lozinka);
+    data.append('password_confirmation', formData.potvrdaLozinke);
     if (imageFile) {
       data.append('photoPath', imageFile);
     }
@@ -82,6 +93,7 @@ const DodavanjeUcenika = () => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
         },
         body: data,
       });
@@ -92,153 +104,91 @@ const DodavanjeUcenika = () => {
         alert('Učenik uspešno dodat!');
         navigate('/dashboard/ucenici');
       } else {
-        alert('Greška pri dodavanju učenika: ' + (result.message || 'Nepoznata greška.'));
+        alert('Greška: ' + (result.message || 'Nepoznata greška.'));
       }
     } catch (error) {
-      alert('Greška pri komunikaciji sa serverom: ' + error.message);
+      alert('Greška u komunikaciji sa serverom: ' + error.message);
     }
   };
 
   return (
-    <div className="container">
-      <div className="container-header column w-40">
-        <div className="input-wrapper floating-label-visible">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="m-t-5 img"
-          />
-          {imagePreview && (
-            <img src={imagePreview} alt="Preview" className="img-preview m-t-5" />
-          )}
+    <form onSubmit={handleSubmit} className="dodaj-ucenika-container">
+      <div className="form-header">
+        <h2>Novi Učenik</h2>
+        <p className="breadcrumbs">Svi učenici / Novi učenik</p>
+      </div>
+
+      <div className="ucenik-form w-40">
+        <div className="photo-upload">
+          <div className="photo-box" onClick={handleImageClick}>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              style={{ display: 'none' }}
+            />
+            {imagePreview ? (
+              <img src={imagePreview} alt="Preview" className="img-preview" />
+            ) : (
+              <div className="photo-preview">
+                <span style={{ fontSize: '30px' }}>🖼️</span>
+                <p>Dodaj fotografiju</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className={getWrapperClass('ime')}>
-          <label>Ime</label>
-          <input
-            type="text"
-            name="ime"
-            value={formData.ime}
-            onChange={handleChange}
-            onFocus={() => handleFocus('ime')}
-            onBlur={() => handleBlur('ime')}
-            className="m-t-5"
-            placeholder="Unesite ime.."
-          />
-        </div>
+        {[
+          { label: 'Ime', name: 'ime' },
+          { label: 'Prezime', name: 'prezime' },
+          { label: 'JMBG', name: 'jmbg' },
+          { label: 'Email', name: 'email', type: 'email' },
+          { label: 'Korisničko ime', name: 'korisnickoIme' },
+        ].map(({ label, name, type = 'text' }) => (
+          <div key={name} className={getWrapperClass(name)}>
+            <label>{label}</label>
+            <input
+              type={type}
+              name={name}
+              value={formData[name]}
+              onChange={handleChange}
+              onFocus={() => handleFocus(name)}
+              onBlur={() => handleBlur(name)}
+              placeholder={`Unesite ${label.toLowerCase()}...`}
+            />
+            {errors[name] && <span className="error-message">{errors[name]}</span>}
+          </div>
+        ))}
 
-        <div className={getWrapperClass('prezime')}>
-          <label>Prezime</label>
-          <input
-            type="text"
-            name="prezime"
-            value={formData.prezime}
-            onChange={handleChange}
-            onFocus={() => handleFocus('prezime')}
-            onBlur={() => handleBlur('prezime')}
-            className="m-t-5"
-            placeholder="Unesite prezime.."
-          />
-        </div>
+        {[
+          { label: 'Lozinka', name: 'lozinka', visible: showPassword, toggle: setShowPassword },
+          { label: 'Potvrda lozinke', name: 'potvrdaLozinke', visible: showConfirm, toggle: setShowConfirm },
+        ].map(({ label, name, visible, toggle }) => (
+          <div key={name} className={getWrapperClass(name)}>
+            <label>{label}</label>
+            <input
+              type={visible ? 'text' : 'password'}
+              name={name}
+              value={formData[name]}
+              onChange={handleChange}
+              onFocus={() => handleFocus(name)}
+              onBlur={() => handleBlur(name)}
+              placeholder={`Unesite ${label.toLowerCase()}...`}
+            />
+            <span className="toggle-password" onClick={() => toggle((prev) => !prev)}>
+              {visible ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+            </span>
+            {errors[name] && <span className="error-message">{errors[name]}</span>}
+          </div>
+        ))}
 
-        <div className={getWrapperClass('uloga')}>
-          <label>Uloga</label>
-          <select
-            name="uloga"
-            value={formData.uloga}
-            onChange={handleChange}
-            onFocus={() => handleFocus('uloga')}
-            onBlur={() => handleBlur('uloga')}
-            className="m-t-5"
-          >
-            <option value="Ucenik">Učenik</option>
-            <option value="Bibliotekar">Bibliotekar</option>
-          </select>
-        </div>
-
-        <div className={getWrapperClass('jmbg')}>
-          <label>JMBG</label>
-          <input
-            type="text"
-            name="jmbg"
-            value={formData.jmbg}
-            onChange={handleChange}
-            onFocus={() => handleFocus('jmbg')}
-            onBlur={() => handleBlur('jmbg')}
-            className="m-t-5"
-            placeholder="Unesite JMBG.."
-          />
-        </div>
-
-        <div className={getWrapperClass('email')}>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            onFocus={() => handleFocus('email')}
-            onBlur={() => handleBlur('email')}
-            className="m-t-5"
-            placeholder="Unesite e-mail.."
-          />
-        </div>
-
-        <div className={getWrapperClass('korisnickoIme')}>
-          <label>Korisničko ime</label>
-          <input
-            type="text"
-            name="korisnickoIme"
-            value={formData.korisnickoIme}
-            onChange={handleChange}
-            onFocus={() => handleFocus('korisnickoIme')}
-            onBlur={() => handleBlur('korisnickoIme')}
-            className="m-t-5"
-            placeholder="Unesite korisničko ime.."
-          />
-        </div>
-
-        <div className={getWrapperClass('lozinka')}>
-          <label>Lozinka</label>
-          <input
-            type={showPassword ? 'text' : 'password'}
-            name="lozinka"
-            value={formData.lozinka}
-            onChange={handleChange}
-            onFocus={() => handleFocus('lozinka')}
-            onBlur={() => handleBlur('lozinka')}
-            className="m-t-5"
-            placeholder="Unesite lozinku.."
-          />
-          <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-          </span>
-        </div>
-
-        <div className={getWrapperClass('potvrdaLozinke')}>
-          <label>Potvrda lozinke</label>
-          <input
-            type={showConfirm ? 'text' : 'password'}
-            name="potvrdaLozinke"
-            value={formData.potvrdaLozinke}
-            onChange={handleChange}
-            onFocus={() => handleFocus('potvrdaLozinke')}
-            onBlur={() => handleBlur('potvrdaLozinke')}
-            className="m-t-5"
-            placeholder="Ponovno unesite lozinku.."
-          />
-          <span className="toggle-password" onClick={() => setShowConfirm(!showConfirm)}>
-            {showConfirm ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-          </span>
-        </div>
-
-        <div className="m-t-5 align-right">
-          <button className="button-add" onClick={handleSubmit}>🗸 SAČUVAJ</button>
-          <button className="cancel-btn" onClick={() => navigate('/dashboard/ucenici')}>X PONIŠTI</button>
+        <div className="form-buttons">
+          <button type="submit" className="sacuvaj-btn">✓ SAČUVAJ</button>
+          <button type="button" className="ponisti-btn" onClick={() => navigate('/dashboard/ucenici')}>✗ PONIŠTI</button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

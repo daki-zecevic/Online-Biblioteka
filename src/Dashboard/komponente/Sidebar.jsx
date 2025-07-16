@@ -16,7 +16,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
     { path: "/dashboard/librarians", label: "Bibliotekari", icon: <Users size={20} /> },
     { path: "/dashboard/books", label: "Knjige", icon: <BookOpen size={20} /> },
-    { path: "/dashboard/students", label: "Učenici", icon: <GraduationCap size={20} /> },
+    { path: "/dashboard/ucenici", label: "Učenici", icon: <GraduationCap size={20} /> },
     { path: "/dashboard/authors", label: "Autori", icon: <PenSquare size={20} /> },
     { path: "/dashboard/checkout", label: "Izdavanje", icon: <RefreshCw size={20} /> }
   ];
