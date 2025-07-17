@@ -60,7 +60,7 @@ const NoviAdmin = () => {
     e.preventDefault();
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Morate unijeti ime!';
-    if (!formData.surname) newErrors.surname = 'Morate unijeti prezime!';
+    if (!formData.surename) newErrors.surename = 'Morate unijeti prezime!';
     if (!formData.jmbg) newErrors.jmbg = 'Morate unijeti JMBG!';
     if (!formData.email) newErrors.email = 'Morate unijeti E-mail!';
     if (!formData.username) newErrors.username = 'Morate unijeti korisničko ime!';
@@ -92,10 +92,13 @@ const NoviAdmin = () => {
           }, 1200);
         }
         else {
-          toast.error(data.message || 'Unauthenticated');
+          if (data.errors) {
+            setErrors(data.errors);
+          }
+          toast.error(data.message || 'Greška pri dodavanju admina');
         }
       } catch (error) {
-        toast.error('Unauthenticated');
+        toast.error('Greška pri povezivanju sa serverom');
       } finally {
         setLoading(false);
       }
@@ -162,14 +165,14 @@ const NoviAdmin = () => {
         <div className="floating-label-group">
           <input
             type="text"
-            name="surname"
-            id="surname"
+            name="surename"
+            id="surename"
             placeholder=" "
-            value={formData.surname}
+            value={formData.surename}
             onChange={handleChange}
           />
-          <label htmlFor="surname">Prezime</label>
-          {errors.surname && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.surname}</div>}
+          <label htmlFor="surename">Prezime</label>
+          {errors.surename && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.surename}</div>}
         </div>
 
         <div className="floating-label-group">
@@ -237,7 +240,6 @@ const NoviAdmin = () => {
             type={showConfirm ? 'text' : 'password'}
             name="password_confirmation"
             id="password_confirmation"
-            required
             placeholder=" "
             value={formData.password_confirmation}
             onChange={handleChange}
