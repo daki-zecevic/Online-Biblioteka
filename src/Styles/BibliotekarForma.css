@@ -1,92 +1,144 @@
 .dodaj-bibliotekara-container {
   display: flex;
   flex-direction: column;
-  padding: 30px 60px;
-  max-width: 1200px;
-  margin: auto;
+  padding: 40px 60px;
+  background-color: #f8fafc;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
 }
 
 .form-header {
-  text-align: right;
   margin-bottom: 30px;
 }
 
+.form-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.breadcrumbs {
+  font-size: 14px;
+  color: #6b7280;
+}
+
 .bibliotekar-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 40px;
+  align-items: start;
+  max-width: 900px;
 }
 
 .photo-upload {
-  width: 200px;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .photo-box {
-  width: 100%;
-  height: 200px;
-  border: 2px dashed #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border: 2px solid #1976d2;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  overflow: hidden;
 }
 
 .photo-preview {
   text-align: center;
+  color: #555;
 }
 
 .bibliotekar-form input,
 .bibliotekar-form select {
-  width: 300px;
-  padding: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  margin-bottom: 14px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.bibliotekar-form select:disabled {
+  background-color: #f3f4f6;
+  color: #6b7280;
 }
 
 .password-wrapper {
-  display: flex;
-  align-items: center;
   position: relative;
-}
-
-.password-wrapper input {
-  width: 300px;
-  padding-right: 40px;
 }
 
 .toggle-password {
   position: absolute;
   right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
-  cursor: pointer;
   font-size: 18px;
+  cursor: pointer;
+  color: #555;
 }
 
 .form-buttons {
   display: flex;
-  gap: 15px;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.sacuvaj-btn, .ponisti-btn {
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
+  gap: 16px;
+  margin-top: 10px;
 }
 
 .sacuvaj-btn {
-  background-color: #2196F3;
+  background-color: #1976d2;
   color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.3s ease;
+}
+
+.sacuvaj-btn:hover {
+  background-color: #1565c0;
 }
 
 .ponisti-btn {
-  background-color: #f44336;
+  background-color: #e53935;
   color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.3s ease;
+}
+
+.ponisti-btn:hover {
+  background-color: #c62828;
+}
+
+
+@media (max-width: 768px) {
+  .bibliotekar-form {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-upload {
+    align-items: center;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .form-buttons button {
+    width: 100%;
+  }
 }
