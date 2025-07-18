@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
+import '../Styles/Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -83,7 +84,7 @@ const Register = () => {
   };
 
   return (
-    <div className="background">
+    <div className="register-background">
       <div className="column align-center w-25 margin m-t-150 p-20 background-white">
         <h1>Register</h1>
 
@@ -116,10 +117,10 @@ const Register = () => {
             <label htmlFor={name}>{label}</label>
           </div>
         ))}
-        <div>
+
         <button onClick={handleRegister} className="m-t-20 p-10 border button">REGISTER</button>
         <button onClick={handleLogin} className="m-t-20 p-10 button-white">RETURN TO LOGIN</button>
-        </div>
+
         {message && <p className="m-t-20">{message}</p>}
 
         <p className="m-t-20 p">©2025 ICT Cortex. All rights reserved</p>

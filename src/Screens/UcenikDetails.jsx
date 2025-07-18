@@ -61,13 +61,27 @@ return (
       <button onClick={() => navigate(-1)}>← Nazad</button>
       <h2>Detalji učenika</h2>
       <img src={user.avatar} alt={user.name} />
-      <div className="detail-row"><strong>Ime i prezime:</strong> {user.name}</div>
-      <div className="detail-row"><strong>Email:</strong> {user.email}</div>
-      <div className="detail-row"><strong>Tip korisnika:</strong> {user.type}</div>
-      <div className="detail-row"><strong>Zadnji pristup:</strong> {user.lastAccess}</div>
+      
+      <div className="detail-row">
+        <strong>Ime i prezime:</strong>
+        <div className="detail-value">{user.name}</div>
+      </div>
+      <div className="detail-row">
+        <strong>Email:</strong>
+        <div className="detail-value">{user.email}</div>
+      </div>
+      <div className="detail-row">
+        <strong>Tip korisnika:</strong>
+        <div className="detail-value">{user.type}</div>
+      </div>
+      <div className="detail-row">
+        <strong>Zadnji pristup:</strong>
+        <div className="detail-value">{user.lastAccess}</div>
+      </div>
     </div>
   </div>
 );
+
 }
 
 export default UcenikDetails;

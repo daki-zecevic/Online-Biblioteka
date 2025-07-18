@@ -16,6 +16,7 @@ import IzmjenaAdmin from './Screens/IzmjenaAdmin.jsx';
 import Knjige from './Screens/Knjige.jsx';
 import NovaKnjiga from './Screens/NovaKnjiga.jsx';
 import KnjigaPrikaz from './Screens/KnjigaPrikaz.jsx';
+import BibliotekariDetalji from './Screens/BibliotekariDetalji.jsx';
 import './Styles/Register.css';
 import './Login.css';
 import './Styles/fonts.css';
@@ -32,6 +33,7 @@ function App() {
           <Route index element={<DashboardContent />} />
           <Route path="bibliotekari" element={<Bibliotekari />} />
           <Route path="bibliotekari/n" element={<DodajBibliotekara />} />
+          <Route path="bibliotekari/:id" element={<BibliotekariDetalji />} />
           <Route path="ucenici" element={<Ucenici />} />
           <Route path="ucenici/novi" element={<DodavanjeUcenika />} /> 
           <Route path="ucenici/view/:id" element={<UcenikDetails />} /> 

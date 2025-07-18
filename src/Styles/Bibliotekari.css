@@ -1,117 +1,97 @@
 .bibliotekari-container {
-  padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
+  padding: 60px 80px;
+  background-color: #f9fafb;
   min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .bibliotekari-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 1,3rem;
 }
 
 .add-btn {
   background-color: #1976d2;
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
+  width: 9%;
+  
+}
+
+.add-btn:hover {
+  background-color: #1565c0;
 }
 
 .search-input {
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 4px;
+  padding: 10px 16px;
   border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  width: 250px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.05);
 }
 
 .bibliotekari-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 10px;
   background-color: white;
-  border-radius: 6px;
-  overflow: hidden;
 }
 
-.bibliotekari-table th, .bibliotekari-table td {
-  padding: 12px;
+.bibliotekari-table th,
+.bibliotekari-table td {
+  padding: 14px 18px;
   text-align: left;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
 }
 
 .bibliotekari-table thead {
-  background-color: #f1f3f5;
+  background-color: #f0f4f8;
 }
 
 .name-cell {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ddd;
 }
 
 .menu-dots {
-  cursor: pointer;
-  font-size: 20px;
-  text-align: right;
+  background: none;
   border: none;
-  background-color: white;
-  color: black;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 5px;
+  color: #333;
+}
+
+.menu-wrapper {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 10;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  padding: 8px;
 }
 
 .table-footer {
+  margin-top: 20px;
   display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-  font-size: 15px;
-  color: #555;
-}
-
-
-.menu-dots {
-  font-size: 20px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 24px;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  z-index: 10;
-  border-radius: 4px;
-  width: 100px;
-}
-
-.dropdown-menu div {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.dropdown-menu div:hover {
-  background-color: #f0f0f0;
-}
-
-.name-cell {
-  display: flex;
+  justify-content: flex-end;
   align-items: center;
-  gap: 8px;
-}
-
-.avatar {
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
 }

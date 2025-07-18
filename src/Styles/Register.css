@@ -1,6 +1,4 @@
-body {
-    background-image: url("../Resources/Background.jpg");
-}
+
 
 .background-white {
   width: 100%;
@@ -54,6 +52,7 @@ input:hover {
     border: rgb(131, 131, 131) 1px solid;
     font-family: "Roboto", sans-serif;
     font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
 }
 
 .button-white:hover {
@@ -159,6 +158,18 @@ input:hover {
 .input-wrapper input:focus {
   border: 1px solid rgba(51, 146, 234, 1);
   outline: none;
+}
+
+.register-background {
+  background-image: url('../Resources/Background.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
 }
 
 

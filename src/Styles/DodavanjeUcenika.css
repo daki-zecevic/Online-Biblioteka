@@ -1,94 +1,67 @@
-.container {
+.dodaj-ucenika-container {
+  max-width: 100%;
+  margin: 1rem;
   padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
-  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.container-header {
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.form-header .breadcrumbs {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.2rem;
+}
+
+.form-header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ucenik-form {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 
-.img {
-    width: 200px;
-    height: 160px;
+.photo-upload {
+  display: flex;
+  justify-content: flex-start;
 }
 
-.align-center {
-    text-align: center;
+.photo-box {
+  width: 180px;
+  height: 150px;
+  border: 2px solid #918e8e;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  transition: border 0.3s ease;
+  margin-bottom: 0.2rem;
 }
 
-.align-left {
-    text-align: left;
+.photo-box:hover {
+  border-color: #007bff;
 }
 
-.align-right {
-    text-align: right;
+.photo-preview {
+  text-align: center;
+  color: #555;
 }
 
-.justify-center {
-    display: flex;
-    justify-content: center;
-}
-
-.row {
-    display: flex;
-    flex-direction: row;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-}
-
-.margin {
-    margin: auto;
-}
-
-.m-t-5 {
-    margin-top: 5px;
-}
-
-.m-t-10 {
-    margin-top: 10px;
-}
-
-.m-t-20 {
-    margin-top: 20px;
-}
-
-.m-t-150{
-    margin-top: 150px;
-}
-
-.p-10 {
-    padding: 10px;
-}
-
-.p-20 {
-    padding: 20px;
-}
-
-.w-100 {
-    width: 100%;
-}
-
-.w-75 {
-    width: 75%;
-}
-
-.w-50 {
-    width: 50%;
-}
-
-.w-40 {
-    width: 40%;
-}
-
-.w-25 {
-    width: 25%;
+.photo-preview p {
+  margin: 0;
+  font-size: 0.85rem;
 }
 
 .input-wrapper {
@@ -133,6 +106,16 @@
   outline: none;
 }
 
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
 .toggle-password {
   position: absolute;
   top: 50%;
@@ -151,41 +134,116 @@
   border-radius: 5px;
 }
 
-.password-wrapper {
-  position: relative;
-  width: 100%;
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.password-wrapper input {
-  width: 100%;
-  padding-right: 40px; 
-}
-
-.toggle-password {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
+.sacuvaj-btn {
+  background-color: rgba(51, 146, 234, 1);
+  color: white;
+  border: 1px solid rgba(51, 146, 234, 1);
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin-right: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 22px;
-  color: #999;
-  z-index: 2;
+  transition: background 0.3s ease;
 }
 
-.button-add {
-    background-color: rgba(51, 146, 234, 1);
-    color: white;
-    border: 1px solid rgba(51, 146, 234, 1);
-    border-radius: 4px;
-    padding: 8px 10px 8px 8px;
-    margin-right: 4px;
+.sacuvaj-btn:hover {
+  background-color: #0056b3;
 }
 
-.cancel-btn {
-    background-color: white;
-    color: rgba(51, 146, 234, 1);
-    border: 1px solid rgba(51, 146, 234, 1);
-    border-radius: 4px;
-    padding: 8px 10px 8px 8px;
+.ponisti-btn {
+  background-color: white;
+  color: rgba(51, 146, 234, 1);
+  border: 1px solid rgba(51, 146, 234, 1);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
+.ponisti-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.margin {
+  margin: auto;
+}
+
+.m-t-5 {
+  margin-top: 5px;
+}
+
+.m-t-10 {
+  margin-top: 10px;
+}
+
+.m-t-20 {
+  margin-top: 20px;
+}
+
+.m-t-150 {
+  margin-top: 150px;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.p-20 {
+  padding: 20px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.w-25 {
+  width: 25%;
+}
