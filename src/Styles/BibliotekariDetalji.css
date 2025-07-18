@@ -1,0 +1,50 @@
+.detalji-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.detalji-kartica {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detalji-red {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+.detalji-red span:first-child {
+  font-weight: bold;
+  color: #444;
+}
+
+.nazad-btn {
+  margin-top: 24px;
+  padding: 10px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  transition: 0.2s;
+}
+
+.nazad-btn:hover {
+  background-color: #0056b3;
+}
