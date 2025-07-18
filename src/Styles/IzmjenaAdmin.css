@@ -1,0 +1,320 @@
+.izmjena-admin-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 2rem 2rem 2rem 4rem; 
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  border-radius: 0;
+  box-shadow: none;
+  min-height: 100vh;
+}
+
+.izmjena-admin-header {
+  margin-bottom: 2rem;
+}
+
+.izmjena-admin-header .breadcrumbs {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.2rem;
+}
+
+.izmjena-admin-header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.izmjena-admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;      
+  max-width: 450px; 
+  margin: 0;       
+}
+
+.izmjena-admin-photo-upload {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.izmjena-admin-photo-box {
+  width: 180px;
+  height: 150px;
+  border: 2px solid #918e8e;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.izmjena-admin-photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.izmjena-admin-photo-box .placeholder {
+  text-align: center;
+  color: #ccc;
+}
+
+.izmjena-admin-photo-box .placeholder .icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.izmjena-admin-form input[type="file"] {
+  display: none;
+}
+
+.izmjena-admin-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.izmjena-admin-form-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.izmjena-admin-form input,
+.izmjena-admin-form select {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s ease;
+  background: none;
+}
+
+.izmjena-admin-form input:focus,
+.izmjena-admin-form select:focus {
+  border-color: #007bff;
+}
+
+.izmjena-admin-password-wrapper {
+  position: relative;
+}
+
+.izmjena-admin-password-wrapper input {
+  width: 100%;
+}
+
+.izmjena-admin-toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.floating-label-group {
+  position: relative;
+  margin-bottom: 0;
+}
+
+.floating-label-group input {
+  width: 100%;
+  padding: 1.2rem 1rem 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  background: none;
+  transition: border 0.2s;
+}
+
+.floating-label-group input:focus {
+  border-color: #007bff;
+}
+
+.floating-label-group label {
+  position: absolute;
+  left: 1rem;
+  top: 1.1rem;
+  color: #888;
+  font-size: 1rem;
+  pointer-events: none;
+  background: #fff;
+  padding: 0 0.2rem;
+  transition: 0.2s;
+}
+
+.floating-label-group input:focus + label,
+.floating-label-group input:not(:placeholder-shown) + label {
+  top: -0.6rem;
+  left: 0.8rem;
+  font-size: 0.85rem;
+  color: #007bff;
+  background: #fff;
+}
+
+.izmjena-admin-floating-label-group {
+  position: relative;
+  margin-bottom: 0;
+}
+
+.izmjena-admin-floating-label-group input {
+  width: 100%;
+  padding: 1.2rem 1rem 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  background: none;
+  transition: border 0.2s;
+}
+
+.izmjena-admin-floating-label-group input:focus {
+  border-color: #007bff;
+}
+
+.izmjena-admin-floating-label-group label {
+  position: absolute;
+  left: 1rem;
+  top: 1.1rem;
+  color: #888;
+  font-size: 1rem;
+  pointer-events: none;
+  background: #fff;
+  padding: 0 0.2rem;
+  transition: 0.2s;
+}
+
+.izmjena-admin-floating-label-group input:focus + label,
+.izmjena-admin-floating-label-group input:not(:placeholder-shown) + label {
+  top: -0.6rem;
+  left: 0.8rem;
+  font-size: 0.85rem;
+  color: #007bff;
+  background: #fff;
+}
+
+.izmjena-admin-form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  align-items: flex-start;
+  justify-content: flex-start; 
+  padding: 0;
+  width: auto;  
+}
+
+.sacuvaj-btn,
+.ponisti-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.sacuvaj-btn {
+  background-color: #007bff;
+  color: #fff;
+  margin-left: 0 !important; 
+}
+
+.sacuvaj-btn:hover {
+  background-color: #0056b3;
+}
+
+.ponisti-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.ponisti-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.izmjena-admin-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.izmjena-admin-btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  margin-left: 0 !important; 
+}
+
+.izmjena-admin-btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.izmjena-admin-btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.izmjena-admin-btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.izmjena-admin-loading-overlay {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  background: rgba(255,255,255,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.izmjena-admin-loading-spinner {
+  border: 4px solid #eee;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  width: 40px; 
+  height: 40px;
+  animation: izmjena-admin-spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes izmjena-admin-spin {
+  to { transform: rotate(360deg); }
+}
+
+.izmjena-admin-loading-overlay span {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Error styling */
+.izmjena-admin-form-group.error input {
+  border-color: #dc3545;
+}
+
+.izmjena-admin-error-message {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}

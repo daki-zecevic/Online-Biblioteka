@@ -257,10 +257,10 @@ const NoviAdmin = () => {
         </div>
 
         <div className="form-buttons">
-          <button type="submit" className="sacuvaj-btn">✓ SAČUVAJ</button>
+          <button type="submit" className="izmjena-admin-btn izmjena-admin-btn-primary">✓ SAČUVAJ</button>
           <button
             type="button"
-            className="ponisti-btn"
+            className="izmjena-admin-btn izmjena-admin-btn-secondary"
             onClick={() => navigate('/Dashboard/admin')}
           >
             ✗ PONIŠTI

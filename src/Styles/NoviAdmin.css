@@ -108,7 +108,7 @@
   display: flex;
   gap: 1rem;
   margin-top: 0.5rem;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start; 
   padding: 0;
   width: auto;  
@@ -141,6 +141,35 @@
 }
 
 .ponisti-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.izmjena-admin-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.izmjena-admin-btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  margin-left: 0 !important; 
+}
+
+.izmjena-admin-btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.izmjena-admin-btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.izmjena-admin-btn-secondary:hover {
   background-color: #e0e0e0;
 }
 
