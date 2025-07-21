@@ -52,7 +52,6 @@ const Bibliotekari = () => {
   const [openMeniId, setOpenMeniId] = useState(null);
   const meniRef = useRef(null);
 
- 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (meniRef.current && !meniRef.current.contains(e.target)) {
@@ -63,7 +62,6 @@ const Bibliotekari = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
- 
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem('bibliotekari')) || [];
     const formatted = localData.map((b, index) => ({
@@ -121,7 +119,11 @@ const Bibliotekari = () => {
                   </button>
                   {openMeniId === user.id && (
                     <div ref={meniRef} className="menu-wrapper">
-                      <BibliotekarMeni onClose={() => setOpenMeniId(null)} />
+                      <BibliotekarMeni
+                        id={user.id}                     // ← VAŽNO: dodajemo id
+                        onClose={() => setOpenMeniId(null)}
+                        onBrisi={() => console.log("Brisanje...")} // ili stvarna funkcija brisanja
+                      />
                     </div>
                   )}
                 </td>

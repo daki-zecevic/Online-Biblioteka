@@ -1,75 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../Styles/BibliotekariDetalji.css';
+import '../Styles/UcenikDetails.css';
 
 const BibliotekarDetalji = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [bibliotekar, setBibliotekar] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [greska, setGreska] = useState(null);
 
   useEffect(() => {
     const fetchBibliotekar = async () => {
       try {
-        const response = await fetch(`https://library-api-k5b6.onrender.com/users/${id}`);
-        if (!response.ok) throw new Error('Greška prilikom dohvatanja podataka.');
-        const data = await response.json();
+        const res = await fetch(`https://library-api-k5b6.onrender.com/users/${id}`);
+        if (!res.ok) throw new Error('Nije pronađen bibliotekar');
+        const data = await res.json();
         setBibliotekar(data);
-      } catch (error) {
-        console.error(error);
-        alert('Nije moguće učitati detalje bibliotekara.');
+      } catch (err) {
+        console.error(err);
+        setGreska(err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBibliotekar();
   }, [id]);
 
-  if (!bibliotekar) {
-    return <div>Učitavanje podataka...</div>;
-  }
+  if (loading) return <div>Učitavanje...</div>;
+  if (greska) return <div>Greška: {greska}</div>;
+  if (!bibliotekar) return <div>Bibliotekar nije pronađen</div>;
 
   return (
-    <div className="detalji-container">
-      <h2>Detalji o Bibliotekaru</h2>
-      <div className="detalji-kartica">
-        <div className="detalji-red">
-          <span>Ime:</span>
-          <span>{bibliotekar.ime}</span>
-        </div>
-        <div className="detalji-red">
-          <span>Prezime:</span>
-          <span>{bibliotekar.prezime}</span>
-        </div>
-        <div className="detalji-red">
-          <span>JMBG:</span>
-          <span>{bibliotekar.jmbg}</span>
-        </div>
-        <div className="detalji-red">
-          <span>Email:</span>
-          <span>{bibliotekar.email}</span>
-        </div>
-        <div className="detalji-red">
-          <span>Korisničko ime:</span>
-          <span>{bibliotekar.korisnickoIme}</span>
-        </div>
-        <div className="detalji-red">
-          <span>Uloga:</span>
-          <span>{bibliotekar.uloga}</span>
-        </div>
-        <div className="detalji-red">
-          <span>Kreiran:</span>
-          <span>{new Date(bibliotekar.createdAt).toLocaleString()}</span>
-        </div>
-        <div className="detalji-red">
-          <span>Status prijave:</span>
-          <span>
-            {bibliotekar.lastLogin
-              ? new Date(bibliotekar.lastLogin).toLocaleString()
-              : 'Nije se nikad ulogovao'}
-          </span>
-        </div>
+    <div className="no-scroll-container">
+      <div className="container">
+        <button onClick={() => navigate(-1)}>← Nazad</button>
+        <h2>Detalji bibliotekara</h2>
+        {bibliotekar.avatarUrl && <img src={bibliotekar.avatarUrl} alt={bibliotekar.ime} />}
+        
+        <div className="detail-row"><strong>Ime i prezime:</strong><div className="detail-value">{bibliotekar.ime} {bibliotekar.prezime}</div></div>
+        <div className="detail-row"><strong>Email:</strong><div className="detail-value">{bibliotekar.email}</div></div>
+        <div className="detail-row"><strong>Korisničko ime:</strong><div className="detail-value">{bibliotekar.korisnickoIme || bibliotekar.username}</div></div>
+        <div className="detail-row"><strong>JMBG:</strong><div className="detail-value">{bibliotekar.jmbg || 'N/A'}</div></div>
+        <div className="detail-row"><strong>Uloga:</strong><div className="detail-value">{bibliotekar.uloga}</div></div>
+        {bibliotekar.createdAt && <div className="detail-row"><strong>Kreiran:</strong><div className="detail-value">{new Date(bibliotekar.createdAt).toLocaleString()}</div></div>}
+        {bibliotekar.lastLogin && <div className="detail-row"><strong>Status prijave:</strong><div className="detail-value">{new Date(bibliotekar.lastLogin).toLocaleString()}</div></div>}
       </div>
-
-      <button className="nazad-btn" onClick={() => navigate(-1)}>← Nazad</button>
     </div>
   );
 };
