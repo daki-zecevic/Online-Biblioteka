@@ -102,6 +102,20 @@
   font-size: 1.1rem;
   cursor: pointer;
   color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+  color: #007bff;
+}
+
+.toggle-password svg {
+  width: 18px;
+  height: 18px;
 }
 
 .form-buttons {
