@@ -85,78 +85,122 @@ const Knjige = () => {
           <span>Sačekajte...</span>
         </div>
       )}
+      
       <div className="knjige-header">
-        <button className="add-btn" onClick={() => navigate('/dashboard/knjige/n')}>+ NOVA KNJIGA</button>
-        <input type="text" placeholder="Search..." className="search-input" />
+        <div className="header-left">
+          <h1>Knjige</h1>
+          <button className="nova-knjiga-btn" onClick={() => navigate('/dashboard/knjige/n')}>
+            + NOVA KNJIGA
+          </button>
+        </div>
+        <div className="header-right">
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            className="search-input" 
+          />
+        </div>
       </div>
-      <table className="knjige-table">
-        <thead>
-          <tr>
-            <th>Naslovna</th>
-            <th>Naziv knjige</th>
-            <th>Autor</th>
-            <th>Kategorija</th>
-            <th>Na raspolaganju</th>
-            <th>Rezervisano</th>
-            <th>Izdato</th>
-            <th>U prekoračenju</th>
-            <th>Ukupna količina</th>
-            <th>Akcije</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books.map((book) => (
-            <tr key={book.id}>
-              <td>
-                <img
-                  src={book.photo || (book.pictures && book.pictures.length > 0 ? book.pictures[0][0] : '/Resources/default.jpg')}
-                  alt="Naslovna"
-                  style={{ width: 40, height: 60, objectFit: 'cover', borderRadius: '4px' }}
-                />
-              </td>
-              <td>{book.title || book.nazivKnjiga || '-'}</td>
-              <td>
-                {book.authors && Array.isArray(book.authors)
-                  ? book.authors.map(a => a.name || a).join(', ')
-                  : (book.author || '-')}
-              </td>
-              <td>
-                {book.categories && Array.isArray(book.categories)
-                  ? book.categories.map(c => c.name || c).join(', ')
-                  : (book.category || '-')}
-              </td>
-              <td>{book.samples ?? book.knjigaKolicina ?? '-'}</td>
-              <td>{book.reserved ?? '-'}</td>
-              <td>{book.issued ?? '-'}</td>
-              <td>{book.overdue ?? '-'}</td>
-              <td>{book.total ?? book.knjigaKolicina ?? book.samples ?? '-'}</td>
-              <td>
-                <button onClick={() => navigate(`/dashboard/knjige/prikaz/${book.id}`)}>👁️</button>
-                <button
-                  style={{ marginLeft: 8, color: '#e74c3c', background: 'none', border: 'none', cursor: 'pointer' }}
-                  onClick={() => openDeleteModal(book.id)}
-                  title="Obriši knjigu"
-                >
-                  🗑️
-                </button>
-              </td>
+
+      <div className="table-wrapper">
+        <table className="knjige-table">
+          <thead>
+            <tr>
+              <th>
+                <input type="checkbox" className="select-all-checkbox" />
+              </th>
+              <th>
+                Naziv Knjige 
+                <span className="sort-arrow">↕</span>
+              </th>
+              <th>
+                Autor 
+                <span className="sort-arrow">↕</span>
+              </th>
+              <th>
+                Kategorija 
+                <span className="sort-arrow">↕</span>
+              </th>
+              <th>Na raspolaganju</th>
+              <th>Rezervisano</th>
+              <th>Izdato</th>
+              <th>U prekoračenju</th>
+              <th>Ukupna količina</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="table-footer">
-        <span>Rows per page: 20</span>
-        <span>1 of 1</span>
-        <span>{`< >`}</span>
+          </thead>
+          <tbody>
+            {books.map((book) => (
+              <tr key={book.id}>
+                <td>
+                  <input type="checkbox" className="row-checkbox" />
+                </td>
+                <td className="book-info">
+                  <div className="book-details">
+                    <img
+                      src={book.photo || (book.pictures && book.pictures.length > 0 ? book.pictures[0][0] : '/Resources/default.jpg')}
+                      alt="Naslovna"
+                      className="book-cover"
+                    />
+                    <span className="book-title">{book.title || book.nazivKnjiga || '-'}</span>
+                  </div>
+                </td>
+                <td className="author-cell">
+                  {book.authors && Array.isArray(book.authors)
+                    ? book.authors.map(a => a.name || a).join(', ')
+                    : (book.author || '-')}
+                </td>
+                <td className="category-cell">
+                  {book.categories && Array.isArray(book.categories)
+                    ? book.categories.map(c => c.name || c).join(', ')
+                    : (book.category || '-')}
+                </td>
+                <td className="number-cell">{book.samples ?? book.knjigaKolicina ?? '-'}</td>
+                <td className="number-cell">{book.reserved ?? '-'}</td>
+                <td className="number-cell">{book.issued ?? '-'}</td>
+                <td className="number-cell">{book.overdue ?? '-'}</td>
+                <td className="number-cell">{book.total ?? book.knjigaKolicina ?? book.samples ?? '-'}</td>
+                <td className="actions-cell">
+                  <div className="action-buttons">
+                    <button 
+                      className="action-btn view-btn"
+                      onClick={() => navigate(`/dashboard/knjige/prikaz/${book.id}`)}
+                      title="Pogledaj detalje"
+                    >
+                      ⋮
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+
+      <div className="table-footer">
+        <div className="pagination-info">
+          <span>Rows per page: </span>
+          <select className="rows-per-page">
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <div className="pagination-controls">
+          <span>1 of 1</span>
+          <button className="pagination-btn">‹</button>
+          <button className="pagination-btn">›</button>
+        </div>
+      </div>
+
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>Potvrda brisanja</h3>
             <p>Da li ste sigurni da želite da obrišete ovu knjigu?</p>
             <div className="modal-actions">
-              <button className="sacuvaj-btn" onClick={confirmDelete}>Obriši</button>
-              <button className="ponisti-btn" onClick={closeDeleteModal}>Otkaži</button>
+              <button className="confirm-btn" onClick={confirmDelete}>Obriši</button>
+              <button className="cancel-btn" onClick={closeDeleteModal}>Otkaži</button>
             </div>
           </div>
         </div>
