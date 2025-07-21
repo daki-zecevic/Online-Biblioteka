@@ -10,29 +10,36 @@
   min-height: 100vh;
 }
 
-.form-header {
-  margin-bottom: 2rem;
+.novi-admin-title {
+  display: flex;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  color: #333;
 }
 
-.form-header .breadcrumbs {
+.novi-admin-breadcrumbs {
   font-size: 0.85rem;
   color: #888;
-  margin-bottom: 0.2rem;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.2;
 }
 
-.form-header h2 {
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.bibliotekar-form {
+.novi-admin-form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;      
   max-width: 450px; 
-  margin: 0;       
+  margin: 0;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .photo-upload {
@@ -61,6 +68,20 @@
 .photo-preview {
   text-align: center;
   color: #555;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-preview svg {
+  color: #666;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+.photo-box:hover .photo-preview svg {
+  color: #007bff;
 }
 
 .photo-preview p {
@@ -68,28 +89,16 @@
   font-size: 0.85rem;
 }
 
-.bibliotekar-form input,
-.bibliotekar-form select {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  outline: none;
-  transition: border 0.2s ease;
-  background: none;
-}
-
-.bibliotekar-form input:focus,
-.bibliotekar-form select:focus {
-  border-color: #007bff;
-}
-
 .password-wrapper {
   position: relative;
+  width: 100%;
+  max-width: 450px;
 }
 
 .password-wrapper input {
   width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
 }
 
 .toggle-password {
@@ -121,11 +130,40 @@
 .form-buttons {
   display: flex;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
   align-items: flex-start;
   justify-content: flex-start; 
   padding: 0;
   width: auto;  
+}
+
+.izmjena-admin-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.izmjena-admin-btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  margin-left: 0 !important; 
+}
+
+.izmjena-admin-btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.izmjena-admin-btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.izmjena-admin-btn-secondary:hover {
+  background-color: #e0e0e0;
 }
 
 .sacuvaj-btn,
@@ -158,42 +196,17 @@
   background-color: #e0e0e0;
 }
 
-.izmjena-admin-btn {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.izmjena-admin-btn-primary {
-  background-color: #007bff;
-  color: #fff;
-  margin-left: 0 !important; 
-}
-
-.izmjena-admin-btn-primary:hover {
-  background-color: #0056b3;
-}
-
-.izmjena-admin-btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
-}
-
-.izmjena-admin-btn-secondary:hover {
-  background-color: #e0e0e0;
-}
-
 .floating-label-group {
   position: relative;
   margin-bottom: 0;
+  width: 100%;
 }
 
-.floating-label-group input {
+.floating-label-group input, 
+.floating-label-group select,
+.floating-label-group textarea {
   width: 100%;
+  max-width: 450px;
   padding: 1.2rem 1rem 0.5rem 1rem;
   font-size: 1rem;
   border: 1px solid #ddd;
@@ -201,9 +214,17 @@
   outline: none;
   background: none;
   transition: border 0.2s;
+  box-sizing: border-box;
 }
 
-.floating-label-group input:focus {
+.floating-label-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.floating-label-group input:focus,
+.floating-label-group select:focus,
+.floating-label-group textarea:focus {
   border-color: #007bff;
 }
 
@@ -220,7 +241,11 @@
 }
 
 .floating-label-group input:focus + label,
-.floating-label-group input:not(:placeholder-shown) + label {
+.floating-label-group input:not(:placeholder-shown) + label,
+.floating-label-group select:focus + label,
+.floating-label-group select:not([value=""]) + label,
+.floating-label-group textarea:focus + label,
+.floating-label-group textarea:not(:placeholder-shown) + label {
   top: -0.6rem;
   left: 0.8rem;
   font-size: 0.85rem;
