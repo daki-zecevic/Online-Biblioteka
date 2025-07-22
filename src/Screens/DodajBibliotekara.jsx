@@ -48,6 +48,7 @@ const DodajBibliotekara = () => {
     }
 
     const payload = {
+      id: Date.now(),
       ime: formData.ime,
       prezime: formData.prezime,
       jmbg: formData.jmbg,
@@ -55,6 +56,8 @@ const DodajBibliotekara = () => {
       korisnickoIme: formData.korisnickoIme,
       lozinka: formData.sifra,
       uloga: 'Bibliotekar',
+      slika: slika,
+      createdAt: new Date().toISOString()
     };
 
     try {
@@ -71,7 +74,10 @@ const DodajBibliotekara = () => {
       }
 
       const data = await response.json();
-      console.log('Uspešno dodat:', data);
+
+      const lokalniBibliotekari = JSON.parse(localStorage.getItem('bibliotekari')) || [];
+      lokalniBibliotekari.push(payload);
+      localStorage.setItem('bibliotekari', JSON.stringify(lokalniBibliotekari));
 
       alert('Bibliotekar uspešno dodat!');
       navigate('/dashboard/bibliotekari');

@@ -8,15 +8,23 @@ const BibliotekarMeni = ({ onClose, onBrisi, id }) => {
   const [prikaziPotvrdu, setPrikaziPotvrdu] = useState(false);
   const navigate = useNavigate();
 
-  const handlePotvrdi = () => {
-    setPrikaziPotvrdu(false);
-    onBrisi();
-    onClose();
-  };
-
+  // Prikaz detalja
   const handleDetalji = () => {
     onClose();
     navigate(`/dashboard/bibliotekari/${id}`);
+  };
+
+  // Izmjena bibliotekara
+  const handleIzmjena = () => {
+    onClose();
+    navigate(`/dashboard/bibliotekari/izmijeni/${id}`);
+  };
+
+  // Potvrda brisanja
+  const handlePotvrdi = () => {
+    setPrikaziPotvrdu(false);
+    onBrisi(); // poziva se funkcija iz roditelja
+    onClose(); // zatvori meni
   };
 
   return (
@@ -24,10 +32,12 @@ const BibliotekarMeni = ({ onClose, onBrisi, id }) => {
       <button onClick={handleDetalji}>
         <FaEye /> Pogledaj Detalje
       </button>
-      <button onClick={() => { onClose(); }}>
+
+      <button onClick={handleIzmjena}>
         <FaEdit /> Izmijeni Bibliotekara
       </button>
-      <button onClick={() => { setPrikaziPotvrdu(true); }}>
+
+      <button onClick={() => setPrikaziPotvrdu(true)}>
         <FaTrash /> Izbriši Bibliotekara
       </button>
 

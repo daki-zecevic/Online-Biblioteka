@@ -70,11 +70,19 @@ const Bibliotekari = () => {
       email: b.email,
       type: 'Bibliotekar',
       lastAccess: 'Nije se nikad ulogovao',
-      avatar: b.slika || 'https://i.pravatar.cc/40?u=random'
+      avatar: b.slika || 'https://i.pravatar.cc/40?u=' + (dummyData.length + index + 1)
     }));
-
     setBibliotekari([...dummyData, ...formatted]);
   }, []);
+
+  const obrisiBibliotekara = (id) => {
+    const novi = bibliotekari.filter((b) => b.id !== id);
+    setBibliotekari(novi);
+
+    const originalni = JSON.parse(localStorage.getItem('bibliotekari')) || [];
+    const noviLokalni = originalni.filter((_, index) => dummyData.length + index + 1 !== id);
+    localStorage.setItem('bibliotekari', JSON.stringify(noviLokalni));
+  };
 
   return (
     <div className="bibliotekari-container">
@@ -120,9 +128,9 @@ const Bibliotekari = () => {
                   {openMeniId === user.id && (
                     <div ref={meniRef} className="menu-wrapper">
                       <BibliotekarMeni
-                        id={user.id}                     // ← VAŽNO: dodajemo id
+                        id={user.id}
                         onClose={() => setOpenMeniId(null)}
-                        onBrisi={() => console.log("Brisanje...")} // ili stvarna funkcija brisanja
+                        onBrisi={obrisiBibliotekara}
                       />
                     </div>
                   )}
