@@ -130,17 +130,14 @@ const Register = () => {
     <div className="register-background">
       <style>
         {`
-          /* Fix floating labels background and form background */
           .register-background .floating-label-group label {
             background: #f8f9fa !important;
           }
           
-          /* Change register form background to match NoviAdmin */
           .register-background .background-white {
             background: #f8f9fa !important;
           }
           
-          /* Custom register button styling without conflicts */
           .register-submit-btn {
             background-color: rgba(51, 146, 234, 1) !important;
             color: white !important;

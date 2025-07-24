@@ -86,12 +86,10 @@ const Login = () => {
     <div className="login-container">
       <style>
         {`
-          /* Fix floating labels background to match login box background */
           .login-container .floating-label-group label {
             background: #f8f9fa !important;
           }
           
-          /* Change login box background to match NoviAdmin */
           .login-box {
             background: #f8f9fa !important;
           }
