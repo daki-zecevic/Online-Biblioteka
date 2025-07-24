@@ -42,10 +42,6 @@ const NovaKnjiga = () => {
     document.getElementById('multimedia').click();
   };
 
-  const handleImageClick = () => {
-    fileInputRef.current.click();
-  };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
@@ -76,48 +72,6 @@ const NovaKnjiga = () => {
 
   const handleFileChange = (e) => {
     setMultimedia(Array.from(e.target.files));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Only validate current active tab
-    if (activeTab === 'osnovni') {
-      if (!formData.naziv.trim()) {
-        newErrors.naziv = 'Morate unijeti naziv knjige!';
-      }
-
-      if (!formData.kategorija) {
-        newErrors.kategorija = 'Morate izabrati kategoriju!';
-      }
-
-      if (!formData.autor) {
-        newErrors.autor = 'Morate izabrati autora!';
-      }
-
-      if (!formData.kolicina.trim()) {
-        newErrors.kolicina = 'Morate unijeti količinu!';
-      } else if (isNaN(formData.kolicina) || parseInt(formData.kolicina) <= 0) {
-        newErrors.kolicina = 'Količina mora biti pozitivan broj!';
-      }
-
-      if (formData.godina && (isNaN(formData.godina) || formData.godina.length !== 4)) {
-        newErrors.godina = 'Godina mora biti četvorocifreni broj!';
-      }
-    }
-
-    if (activeTab === 'specifikacija') {
-      if (formData.brojStrana && (isNaN(formData.brojStrana) || parseInt(formData.brojStrana) <= 0)) {
-        newErrors.brojStrana = 'Broj strana mora biti pozitivan broj!';
-      }
-
-      if (formData.isbn && formData.isbn.length < 10) {
-        newErrors.isbn = 'ISBN mora imati najmanje 10 cifara!';
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {

@@ -61,11 +61,6 @@ const Knjige = () => {
     }
   };
 
-  const openDeleteModal = (id) => {
-    setDeleteId(id);
-    setShowDeleteModal(true);
-  };
-
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
     setDeleteId(null);
