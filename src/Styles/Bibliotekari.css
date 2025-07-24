@@ -10,16 +10,20 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  padding: 1,3rem;
+  padding: 1.3rem;
 }
 
 .add-btn {
   background-color: #1976d2;
   color: white;
   border: none;
-  width: 9%;
-  
+  padding: 10px 20px; 
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
 }
+
+
 
 .add-btn:hover {
   background-color: #1565c0;
