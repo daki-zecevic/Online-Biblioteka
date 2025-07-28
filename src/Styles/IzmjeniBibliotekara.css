@@ -1,0 +1,48 @@
+.edit-bibliotekar-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  left: 20rem;
+}
+
+.edit-bibliotekar-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.edit-bibliotekar-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.edit-bibliotekar-container input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.edit-bibliotekar-container input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.edit-bibliotekar-container button {
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-bibliotekar-container button:hover {
+  background-color: #0056b3;
+}
