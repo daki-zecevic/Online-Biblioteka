@@ -4,7 +4,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../Styles/NoviAdmin.css';
 
-// SVG Icons for password visibility
 const EyeClosedIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 16 16">
     <path fill="currentColor" d="M2.85 2.15a.5.5 0 0 0-.707.707l11 11a.5.5 0 0 0 .707-.707zM15 8.88c-.434.594-.885 1.12-1.35 1.59l-.707-.707q.644-.644 1.25-1.47a.5.5 0 0 0 .047-.511l-.045-.075c-1.75-2.4-3.72-3.62-5.93-3.7l-.256-.005a6 6 0 0 0-.787.048l-.862-.862a7.3 7.3 0 0 1 1.65-.187c2.66 0 5 1.39 6.99 4.12a1.5 1.5 0 0 1 0 1.77z"></path>
@@ -22,9 +21,16 @@ const EyeOpenIcon = () => (
   </svg>
 );
 
+const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 const DodavanjeUcenika = () => {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     ime: '',
     prezime: '',
@@ -35,7 +41,6 @@ const DodavanjeUcenika = () => {
     potvrdaLozinke: '',
     photoPath: ''
   });
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [errors, setErrors] = useState({});
@@ -43,7 +48,6 @@ const DodavanjeUcenika = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
-
   const token = localStorage.getItem('authToken');
 
   const handleImageClick = () => {
@@ -78,7 +82,7 @@ const DodavanjeUcenika = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    
+
     if (!formData.ime) newErrors.ime = 'Morate unijeti ime!';
     if (!formData.prezime) newErrors.prezime = 'Morate unijeti prezime!';
     if (!formData.jmbg) newErrors.jmbg = 'Morate unijeti JMBG!';
@@ -95,18 +99,22 @@ const DodavanjeUcenika = () => {
     if (Object.keys(newErrors).length === 0) {
       setLoading(true);
 
-      const data = new FormData();
-      data.append('role_id', 2);
-      data.append('name', formData.ime);
-      data.append('surname', formData.prezime);
-      data.append('jmbg', formData.jmbg);
-      data.append('email', formData.email);
-      data.append('username', formData.korisnickoIme);
-      data.append('password', formData.lozinka);
-      data.append('password_confirmation', formData.potvrdaLozinke);
+      let base64Image = '';
       if (imageFile) {
-        data.append('photoPath', imageFile);
+        base64Image = await toBase64(imageFile);
       }
+
+      const data = {
+        role_id: 2,
+        name: formData.ime,
+        surname: formData.prezime,
+        jmbg: formData.jmbg,
+        email: formData.email,
+        username: formData.korisnickoIme,
+        password: formData.lozinka,
+        password_confirmation: formData.potvrdaLozinke,
+        photoPath: base64Image || null
+      };
 
       try {
         const response = await fetch('https://biblioteka.simonovicp.com/api/users/store', {
@@ -114,8 +122,9 @@ const DodavanjeUcenika = () => {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
-          body: data,
+          body: JSON.stringify(data),
         });
 
         const result = await response.json();
@@ -131,7 +140,7 @@ const DodavanjeUcenika = () => {
           }
           toast.error(result.message || 'Greška pri dodavanju učenika');
         }
-      } catch (error) {
+      } catch {
         toast.error('Greška pri povezivanju sa serverom');
       } finally {
         setLoading(false);
@@ -184,107 +193,48 @@ const DodavanjeUcenika = () => {
         </div>
 
         <div className="floating-label-group">
-          <input
-            type="text"
-            name="ime"
-            id="ime"
-            placeholder=" "
-            value={formData.ime}
-            onChange={handleChange}
-          />
+          <input type="text" name="ime" id="ime" placeholder=" " value={formData.ime} onChange={handleChange} />
           <label htmlFor="ime">Ime</label>
           {errors.ime && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.ime}</div>}
         </div>
 
         <div className="floating-label-group">
-          <input
-            type="text"
-            name="prezime"
-            id="prezime"
-            placeholder=" "
-            value={formData.prezime}
-            onChange={handleChange}
-          />
+          <input type="text" name="prezime" id="prezime" placeholder=" " value={formData.prezime} onChange={handleChange} />
           <label htmlFor="prezime">Prezime</label>
           {errors.prezime && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.prezime}</div>}
         </div>
 
         <div className="floating-label-group">
-          <input
-            type="text"
-            name="jmbg"
-            id="jmbg"
-            placeholder=" "
-            value={formData.jmbg}
-            onChange={handleChange}
-          />
+          <input type="text" name="jmbg" id="jmbg" placeholder=" " value={formData.jmbg} onChange={handleChange} />
           <label htmlFor="jmbg">JMBG</label>
           {errors.jmbg && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.jmbg}</div>}
         </div>
 
         <div className="floating-label-group">
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder=" "
-            value={formData.email}
-            onChange={handleChange}
-          />
+          <input type="email" name="email" id="email" placeholder=" " value={formData.email} onChange={handleChange} />
           <label htmlFor="email">E-mail</label>
           {errors.email && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.email}</div>}
         </div>
 
         <div className="floating-label-group">
-          <input
-            type="text"
-            name="korisnickoIme"
-            id="korisnickoIme"
-            placeholder=" "
-            value={formData.korisnickoIme}
-            onChange={handleChange}
-          />
+          <input type="text" name="korisnickoIme" id="korisnickoIme" placeholder=" " value={formData.korisnickoIme} onChange={handleChange} />
           <label htmlFor="korisnickoIme">Korisničko ime</label>
           {errors.korisnickoIme && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.korisnickoIme}</div>}
         </div>
 
         <div className="floating-label-group password-wrapper">
-          <input
-            type={showPassword ? 'text' : 'password'}
-            name="lozinka"
-            id="lozinka"
-            placeholder=" "
-            value={formData.lozinka}
-            onChange={handleChange}
-          />
+          <input type={showPassword ? 'text' : 'password'} name="lozinka" id="lozinka" placeholder=" " value={formData.lozinka} onChange={handleChange} />
           <label htmlFor="lozinka">Lozinka</label>
-          <button
-            type="button"
-            className="toggle-password"
-            tabIndex={-1}
-            onClick={() => setShowPassword(!showPassword)}
-          >
+          <button type="button" className="toggle-password" tabIndex={-1} onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
           </button>
           {errors.lozinka && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.lozinka}</div>}
         </div>
 
         <div className="floating-label-group password-wrapper">
-          <input
-            type={showConfirm ? 'text' : 'password'}
-            name="potvrdaLozinke"
-            id="potvrdaLozinke"
-            placeholder=" "
-            value={formData.potvrdaLozinke}
-            onChange={handleChange}
-          />
+          <input type={showConfirm ? 'text' : 'password'} name="potvrdaLozinke" id="potvrdaLozinke" placeholder=" " value={formData.potvrdaLozinke} onChange={handleChange} />
           <label htmlFor="potvrdaLozinke">Potvrda lozinke</label>
-          <button
-            type="button"
-            className="toggle-password"
-            tabIndex={-1}
-            onClick={() => setShowConfirm(!showConfirm)}
-          >
+          <button type="button" className="toggle-password" tabIndex={-1} onClick={() => setShowConfirm(!showConfirm)}>
             {showConfirm ? <EyeOpenIcon /> : <EyeClosedIcon />}
           </button>
           {errors.potvrdaLozinke && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.potvrdaLozinke}</div>}
@@ -292,13 +242,7 @@ const DodavanjeUcenika = () => {
 
         <div className="form-buttons">
           <button type="submit" className="izmjena-admin-btn izmjena-admin-btn-primary">✓ SAČUVAJ</button>
-          <button
-            type="button"
-            className="izmjena-admin-btn izmjena-admin-btn-secondary"
-            onClick={() => navigate('/dashboard/ucenici')}
-          >
-            ✗ PONIŠTI
-          </button>
+          <button type="button" className="izmjena-admin-btn izmjena-admin-btn-secondary" onClick={() => navigate('/dashboard/ucenici')}>✗ PONIŠTI</button>
         </div>
       </form>
     </div>

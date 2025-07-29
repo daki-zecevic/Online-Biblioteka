@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './Screens/Register.jsx';
 import Login from './Screens/Login.js';
+import ResetPassword from './Screens/ForgotPassword.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx';
 import Bibliotekari from './Screens/Bibliotekari.jsx';
 import DashboardContent from './Dashboard/DashboardContent.jsx'; 
@@ -22,6 +23,7 @@ import './Styles/Register.css';
 import './Login.css';
 import './Styles/fonts.css';
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -29,6 +31,7 @@ function App() {
         <Route path="/" element={<Register />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ResetPassword />} />
 
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<DashboardContent />} />

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../Styles/Bibliotekari.css';
+import '../Styles/Ucenik.css';
 import { useNavigate } from 'react-router';
 
 const Ucenici = () => {
@@ -118,7 +119,7 @@ const Ucenici = () => {
                 </span>
 
                 {openMenuId === user.id && (
-                  <div className="dropdown-menu" ref={menuRef}>
+                  <div className="menu" ref={menuRef}>
                     <div onClick={() => handleView(user)}>View</div>
                     <div onClick={() => handleEdit(user)}>Edit</div>
                     <div onClick={() => handleDelete(user)}>Delete</div>

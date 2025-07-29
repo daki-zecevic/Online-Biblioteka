@@ -1,0 +1,13 @@
+.menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 9999; 
+  min-width: 200px;
+  padding: 8px 0;
+  overflow: visible;
+}
