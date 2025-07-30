@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard,
@@ -22,15 +22,79 @@ const AdminIcon = () => (
 );
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
-  const navItems = [
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkUserRole = async () => {
+      const token = localStorage.getItem('authToken');
+      const username = localStorage.getItem('username');
+      
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Try different approaches to determine admin status
+        
+        // Approach 1: Try to access admin creation endpoint (POST to /api/users/store with admin role)
+        // This is more likely to be restricted to actual admins
+        const testResponse = await fetch('https://biblioteka.simonovicp.com/api/users/store', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            // Send invalid data to test access - we just want to see if we get 403/401 vs validation error
+            test: true
+          })
+        });
+
+        // If we get anything other than 403/401, user likely has admin access
+        // 422 = validation error (means endpoint is accessible)
+        // 403/401 = forbidden/unauthorized (means no admin access)
+        if (testResponse.status === 422 || testResponse.status === 200) {
+          setIsAdmin(true);
+        } else if (testResponse.status === 403 || testResponse.status === 401) {
+          setIsAdmin(false);
+        } else {
+          // Fallback: Check against known admin usernames
+          const adminUsernames = ['admin', 'administrator', 'super_admin', 'root']; 
+          setIsAdmin(adminUsernames.includes(username?.toLowerCase()));
+        }
+      } catch (error) {
+        console.error('Error checking user role:', error);
+        // Fallback to username-based check
+        const adminUsernames = ['admin', 'administrator', 'super_admin', 'root'];
+        setIsAdmin(adminUsernames.includes(username?.toLowerCase()));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUserRole();
+  }, []);
+
+  const baseNavItems = [
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={20} />, exact: true },
-    { path: "/dashboard/admin", label: "Admin", icon: <AdminIcon /> },
     { path: "/dashboard/bibliotekari", label: "Bibliotekari", icon: <Users size={20} /> },
     { path: "/dashboard/knjige", label: "Knjige", icon: <BookOpen size={20} /> },
     { path: "/dashboard/ucenici", label: "Učenici", icon: <GraduationCap size={20} /> },
     { path: "/dashboard/authors", label: "Autori", icon: <PenSquare size={20} /> },
     { path: "/dashboard/checkout", label: "Izdavanje", icon: <RefreshCw size={20} /> }
   ];
+
+  // Add admin item only if user is admin
+  const navItems = isAdmin 
+    ? [
+        baseNavItems[0], // Dashboard
+        { path: "/dashboard/admin", label: "Admin", icon: <AdminIcon /> },
+        ...baseNavItems.slice(1) // Rest of the items
+      ]
+    : baseNavItems;
 
   return (
     <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
@@ -42,20 +106,26 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
       </div>
       
       <nav className="sidebar-nav">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.exact}
-            className={({ isActive }) => 
-              `nav-item ${isActive ? 'active' : ''}`
-            }
-            data-tooltip={isCollapsed ? item.label : null}
-          >
-            <span className="nav-icon">{item.icon}</span>
-            {!isCollapsed && <span className="nav-text">{item.label}</span>}
-          </NavLink>
-        ))}
+        {loading ? (
+          <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+            {!isCollapsed && <span>Loading...</span>}
+          </div>
+        ) : (
+          navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.exact}
+              className={({ isActive }) => 
+                `nav-item ${isActive ? 'active' : ''}`
+              }
+              data-tooltip={isCollapsed ? item.label : null}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              {!isCollapsed && <span className="nav-text">{item.label}</span>}
+            </NavLink>
+          ))
+        )}
       </nav>
     </div>
   );

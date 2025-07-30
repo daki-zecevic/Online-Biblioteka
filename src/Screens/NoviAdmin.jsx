@@ -78,7 +78,7 @@ const NoviAdmin = () => {
     e.preventDefault();
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Morate unijeti ime!';
-    if (!formData.surname) newErrors.surename = 'Morate unijeti prezime!';
+    if (!formData.surname) newErrors.surname = 'Morate unijeti prezime!';
     if (!formData.jmbg) newErrors.jmbg = 'Morate unijeti JMBG!';
     if (!formData.email) newErrors.email = 'Morate unijeti E-mail!';
     if (!formData.username) newErrors.username = 'Morate unijeti korisničko ime!';
@@ -186,7 +186,7 @@ const NoviAdmin = () => {
             name="surname"
             id="surname"
             placeholder=" "
-            value={formData.surename}
+            value={formData.surname}
             onChange={handleChange}
           />
           <label htmlFor="surname">Prezime</label>

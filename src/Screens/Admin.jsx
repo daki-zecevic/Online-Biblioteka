@@ -54,6 +54,14 @@ const Admin = () => {
   };
 
   const handleDeleteClick = (admin) => {
+    const currentUsername = localStorage.getItem('username');
+    
+    // Check if the user is trying to delete themselves
+    if (admin.name === currentUsername || admin.username === currentUsername) {
+      toast.error('Ne možete obrisati ulogovanog admina');
+      return;
+    }
+    
     setSelectedAdmin(admin);
     setShowModal(true);
     setMenuOpenId(null);
