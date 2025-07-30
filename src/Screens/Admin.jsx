@@ -17,7 +17,7 @@ const Admin = () => {
       setLoading(true); 
       const token = localStorage.getItem('authToken');
       try {
-        const response = await fetch('https://biblioteka.simonovicp.com/api/users?role=admin', {
+        const response = await fetch('https://biblioteka.simonovicp.com/api/users?role_id=3', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json',

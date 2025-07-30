@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import '../Styles/NoviAdmin.css';
 
-// SVG Icons for password visibility
+
 const EyeClosedIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 16 16">
     <path fill="currentColor" d="M2.85 2.15a.5.5 0 0 0-.707.707l11 11a.5.5 0 0 0 .707-.707zM15 8.88c-.434.594-.885 1.12-1.35 1.59l-.707-.707q.644-.644 1.25-1.47a.5.5 0 0 0 .047-.511l-.045-.075c-1.75-2.4-3.72-3.62-5.93-3.7l-.256-.005a6 6 0 0 0-.787.048l-.862-.862a7.3 7.3 0 0 1 1.65-.187c2.66 0 5 1.39 6.99 4.12a1.5 1.5 0 0 1 0 1.77z"></path>
@@ -29,7 +29,7 @@ const NoviAdmin = () => {
   const [formData, setFormData] = useState({
     role_id: 3,
     name: '',
-    surename: '',
+    surname: '',
     jmbg: '',
     email: '',
     username: '',
@@ -78,7 +78,7 @@ const NoviAdmin = () => {
     e.preventDefault();
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Morate unijeti ime!';
-    if (!formData.surename) newErrors.surename = 'Morate unijeti prezime!';
+    if (!formData.surname) newErrors.surename = 'Morate unijeti prezime!';
     if (!formData.jmbg) newErrors.jmbg = 'Morate unijeti JMBG!';
     if (!formData.email) newErrors.email = 'Morate unijeti E-mail!';
     if (!formData.username) newErrors.username = 'Morate unijeti korisničko ime!';
@@ -183,14 +183,14 @@ const NoviAdmin = () => {
         <div className="floating-label-group">
           <input
             type="text"
-            name="surename"
-            id="surename"
+            name="surname"
+            id="surname"
             placeholder=" "
             value={formData.surename}
             onChange={handleChange}
           />
-          <label htmlFor="surename">Prezime</label>
-          {errors.surename && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.surename}</div>}
+          <label htmlFor="surname">Prezime</label>
+          {errors.surname && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.surname}</div>}
         </div>
 
         <div className="floating-label-group">
