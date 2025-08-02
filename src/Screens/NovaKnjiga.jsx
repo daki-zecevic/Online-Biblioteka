@@ -15,26 +15,28 @@ const NovaKnjiga = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    naziv: '',
-    opis: '',
-    kategorija: '',
-    zanr: '',
-    autor: '',
+    nazivKnjiga: '',
+    kratki_sadrzaj: '',
+    categories: '',
+    genres: '',
+    authors: '',
     izdavac: '',
-    godina: '',
-    kolicina: '',
-    brojStrana: '',
-    vrstaPisma: '',
-    vrstaPoveza: '',
-    vrstaFormata: '',
+    godinaIzdavanja: '',
+    knjigaKolicina: '',
+    brStrana: '',
+    pismo: '',
+    povez: '',
+    format: '',
+    jezik: '',
     isbn: '',
-    photoPath: ''
+    deletePdfs: 0
   });
 
   const [activeTab, setActiveTab] = useState('osnovni');
   const [errors, setErrors] = useState({});
   const [slika, setSlika] = useState(null);
   const [multimedia, setMultimedia] = useState([]);
+  const [pictures, setPictures] = useState([]);
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
@@ -47,21 +49,29 @@ const NovaKnjiga = () => {
     if (file && file.type.startsWith('image/')) {
       const imageUrl = URL.createObjectURL(file);
       setSlika(imageUrl);
-      setFormData((prev) => ({
-        ...prev,
-        photoPath: imageUrl,
-      }));
+      
+      const newPicture = [imageUrl, true];
+      setPictures(prev => {
+        const withoutCover = prev.map(pic => [pic[0], false]);
+        return [...withoutCover, newPicture];
+      });
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    let processedValue = value;
+    
+    if (['categories', 'genres', 'authors', 'izdavac', 'pismo', 'povez', 'format', 'jezik'].includes(name)) {
+      processedValue = value ? parseInt(value) : '';
+    }
+    
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: processedValue,
     }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -77,46 +87,44 @@ const NovaKnjiga = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate all required fields before submission
     const allErrors = {};
     
-    if (!formData.naziv.trim()) {
-      allErrors.naziv = 'Morate unijeti naziv knjige!';
+    if (!formData.nazivKnjiga.trim()) {
+      allErrors.nazivKnjiga = 'Morate unijeti naziv knjige!';
     }
 
-    if (!formData.kategorija) {
-      allErrors.kategorija = 'Morate izabrati kategoriju!';
+    if (!formData.categories) {
+      allErrors.categories = 'Morate izabrati kategoriju!';
     }
 
-    if (!formData.autor) {
-      allErrors.autor = 'Morate izabrati autora!';
+    if (!formData.authors) {
+      allErrors.authors = 'Morate izabrati autora!';
     }
 
-    if (!formData.kolicina.trim()) {
-      allErrors.kolicina = 'Morate unijeti količinu!';
-    } else if (isNaN(formData.kolicina) || parseInt(formData.kolicina) <= 0) {
-      allErrors.kolicina = 'Količina mora biti pozitivan broj!';
+    if (!formData.knjigaKolicina) {
+      allErrors.knjigaKolicina = 'Morate unijeti količinu!';
+    } else if (isNaN(formData.knjigaKolicina) || parseInt(formData.knjigaKolicina) <= 0) {
+      allErrors.knjigaKolicina = 'Količina mora biti pozitivan broj!';
     }
 
-    if (formData.godina && (isNaN(formData.godina) || formData.godina.length !== 4)) {
-      allErrors.godina = 'Godina mora biti četvorocifreni broj!';
+    if (formData.godinaIzdavanja && (isNaN(formData.godinaIzdavanja) || formData.godinaIzdavanja.toString().length !== 4)) {
+      allErrors.godinaIzdavanja = 'Godina mora biti četvorocifreni broj!';
     }
 
-    if (formData.brojStrana && (isNaN(formData.brojStrana) || parseInt(formData.brojStrana) <= 0)) {
-      allErrors.brojStrana = 'Broj strana mora biti pozitivan broj!';
+    if (formData.brStrana && (isNaN(formData.brStrana) || parseInt(formData.brStrana) <= 0)) {
+      allErrors.brStrana = 'Broj strana mora biti pozitivan broj!';
     }
 
-    if (formData.isbn && formData.isbn.length < 10) {
+    if (formData.isbn && formData.isbn.toString().length < 10) {
       allErrors.isbn = 'ISBN mora imati najmanje 10 cifara!';
     }
 
     if (Object.keys(allErrors).length > 0) {
       setErrors(allErrors);
       toast.error('Molimo ispravite greške u formi');
-      // Switch to the tab with errors
-      if (allErrors.naziv || allErrors.kategorija || allErrors.autor || allErrors.kolicina || allErrors.godina) {
+      if (allErrors.nazivKnjiga || allErrors.categories || allErrors.authors || allErrors.knjigaKolicina || allErrors.godinaIzdavanja) {
         setActiveTab('osnovni');
-      } else if (allErrors.brojStrana || allErrors.isbn) {
+      } else if (allErrors.brStrana || allErrors.isbn) {
         setActiveTab('specifikacija');
       }
       return;
@@ -126,33 +134,35 @@ const NovaKnjiga = () => {
     
     try {
       const token = localStorage.getItem('authToken');
-      const data = new FormData();
       
-      // Add form data
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key !== 'photoPath' && value) {
-          data.append(key, value);
-        }
-      });
-
-      // Add photo
-      if (fileInputRef.current?.files[0]) {
-        data.append('photo', fileInputRef.current.files[0]);
-      }
-
-      // Add multimedia files
-      multimedia.forEach((file, idx) => {
-        data.append(`multimedia[${idx}]`, file);
-      });
+      const requestBody = {
+        nazivKnjiga: formData.nazivKnjiga,
+        brStrana: formData.brStrana ? parseInt(formData.brStrana) : null,
+        pismo: formData.pismo || null,
+        jezik: formData.jezik || null,
+        povez: formData.povez || null,
+        format: formData.format || null,
+        izdavac: formData.izdavac || null,
+        godinaIzdavanja: formData.godinaIzdavanja ? parseInt(formData.godinaIzdavanja) : null,
+        isbn: formData.isbn ? parseInt(formData.isbn) : null,
+        knjigaKolicina: parseInt(formData.knjigaKolicina),
+        kratki_sadrzaj: formData.kratki_sadrzaj || '',
+        deletePdfs: 0,
+        categories: formData.categories ? [formData.categories] : [],
+        genres: formData.genres ? [formData.genres] : [],
+        authors: formData.authors ? [formData.authors] : [],
+        pictures: pictures
+      };
 
       const response = await fetch('https://biblioteka.simonovicp.com/api/books/store', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        body: data,
+        body: JSON.stringify(requestBody),
       });
-
+      
       if (response.ok) {
         toast.success('Knjiga uspješno dodana!');
         setTimeout(() => {
@@ -207,77 +217,77 @@ const NovaKnjiga = () => {
             <div className="floating-label-group">
               <input
                 type="text"
-                name="naziv"
-                id="naziv"
+                name="nazivKnjiga"
+                id="nazivKnjiga"
                 placeholder=" "
-                value={formData.naziv}
+                value={formData.nazivKnjiga}
                 onChange={handleChange}
               />
-              <label htmlFor="naziv">Naziv knjige</label>
-              {errors.naziv && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.naziv}</div>}
+              <label htmlFor="nazivKnjiga">Naziv knjige</label>
+              {errors.nazivKnjiga && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.nazivKnjiga}</div>}
             </div>
 
             <div className="floating-label-group">
               <textarea
-                name="opis"
-                id="opis"
+                name="kratki_sadrzaj"
+                id="kratki_sadrzaj"
                 placeholder=" "
-                value={formData.opis}
+                value={formData.kratki_sadrzaj}
                 onChange={handleChange}
                 rows={4}
               />
-              <label htmlFor="opis">Kratak sadržaj knjige</label>
-              {errors.opis && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.opis}</div>}
+              <label htmlFor="kratki_sadrzaj">Kratak sadržaj knjige</label>
+              {errors.kratki_sadrzaj && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.kratki_sadrzaj}</div>}
             </div>
 
             <div className="floating-label-group">
-              <select name="kategorija" id="kategorija" value={formData.kategorija} onChange={handleChange}>
+              <select name="categories" id="categories" value={formData.categories} onChange={handleChange}>
                 <option value="">Izaberite kategoriju</option>
-                <option value="Roman">Roman</option>
-                <option value="Udžbenici">Udžbenici</option>
-                <option value="Drama">Drama</option>
-                <option value="Komedija">Komedija</option>
-                <option value="Triler">Triler</option>
-                <option value="Poezija">Poezija</option>
+                <option value="1">Roman</option>
+                <option value="2">Udžbenici</option>
+                <option value="3">Drama</option>
+                <option value="4">Komedija</option>
+                <option value="5">Triler</option>
+                <option value="6">Poezija</option>
               </select>
-              <label htmlFor="kategorija">Kategorija</label>
-              {errors.kategorija && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.kategorija}</div>}
+              <label htmlFor="categories">Kategorija</label>
+              {errors.categories && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.categories}</div>}
             </div>
 
             <div className="floating-label-group">
-              <select name="zanr" id="zanr" value={formData.zanr} onChange={handleChange}>
+              <select name="genres" id="genres" value={formData.genres} onChange={handleChange}>
                 <option value="">Izaberite žanr</option>
-                <option value="Drama">Drama</option>
-                <option value="Komedija">Komedija</option>
-                <option value="Akcija">Akcija</option>
-                <option value="Romantika">Romantika</option>
-                <option value="Horor">Horor</option>
-                <option value="Fantastika">Fantastika</option>
+                <option value="1">Drama</option>
+                <option value="2">Komedija</option>
+                <option value="3">Akcija</option>
+                <option value="4">Romantika</option>
+                <option value="5">Horor</option>
+                <option value="6">Fantastika</option>
               </select>
-              <label htmlFor="zanr">Žanr</label>
-              {errors.zanr && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.zanr}</div>}
+              <label htmlFor="genres">Žanr</label>
+              {errors.genres && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.genres}</div>}
             </div>
 
             <div className="floating-label-group">
-              <select name="autor" id="autor" value={formData.autor} onChange={handleChange}>
+              <select name="authors" id="authors" value={formData.authors} onChange={handleChange}>
                 <option value="">Izaberite autora</option>
-                <option value="Ivo Andrić">Ivo Andrić</option>
-                <option value="Mark Twain">Mark Twain</option>
-                <option value="Paulo Coelho">Paulo Coelho</option>
-                <option value="Agatha Christie">Agatha Christie</option>
-                <option value="Stephen King">Stephen King</option>
+                <option value="53">Ivo Andrić</option>
+                <option value="54">Mark Twain</option>
+                <option value="55">Paulo Coelho</option>
+                <option value="56">Agatha Christie</option>
+                <option value="57">Stephen King</option>
               </select>
-              <label htmlFor="autor">Autor</label>
-              {errors.autor && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.autor}</div>}
+              <label htmlFor="authors">Autor</label>
+              {errors.authors && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.authors}</div>}
             </div>
 
             <div className="floating-label-group">
               <select name="izdavac" id="izdavac" value={formData.izdavac} onChange={handleChange}>
                 <option value="">Izaberite izdavača</option>
-                <option value="Laguna">Laguna</option>
-                <option value="Vulkan">Vulkan</option>
-                <option value="Dereta">Dereta</option>
-                <option value="Booka">Booka</option>
+                <option value="1">Laguna</option>
+                <option value="2">Vulkan</option>
+                <option value="3">Dereta</option>
+                <option value="4">Booka</option>
               </select>
               <label htmlFor="izdavac">Izdavač</label>
               {errors.izdavac && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.izdavac}</div>}
@@ -286,28 +296,28 @@ const NovaKnjiga = () => {
             <div className="floating-label-group">
               <input
                 type="text"
-                name="godina"
-                id="godina"
+                name="godinaIzdavanja"
+                id="godinaIzdavanja"
                 placeholder=" "
-                value={formData.godina}
+                value={formData.godinaIzdavanja}
                 onChange={handleChange}
               />
-              <label htmlFor="godina">Godina izdavanja</label>
-              {errors.godina && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.godina}</div>}
+              <label htmlFor="godinaIzdavanja">Godina izdavanja</label>
+              {errors.godinaIzdavanja && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.godinaIzdavanja}</div>}
             </div>
 
             <div className="floating-label-group">
               <input
                 type="number"
-                name="kolicina"
-                id="kolicina"
+                name="knjigaKolicina"
+                id="knjigaKolicina"
                 placeholder=" "
-                value={formData.kolicina}
+                value={formData.knjigaKolicina}
                 onChange={handleChange}
                 min="1"
               />
-              <label htmlFor="kolicina">Količina</label>
-              {errors.kolicina && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.kolicina}</div>}
+              <label htmlFor="knjigaKolicina">Količina</label>
+              {errors.knjigaKolicina && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.knjigaKolicina}</div>}
             </div>
           </div>
         )}
@@ -317,47 +327,59 @@ const NovaKnjiga = () => {
             <div className="floating-label-group">
               <input
                 type="number"
-                name="brojStrana"
-                id="brojStrana"
+                name="brStrana"
+                id="brStrana"
                 placeholder=" "
-                value={formData.brojStrana}
+                value={formData.brStrana}
                 onChange={handleChange}
                 min="1"
               />
-              <label htmlFor="brojStrana">Broj strana</label>
-              {errors.brojStrana && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.brojStrana}</div>}
+              <label htmlFor="brStrana">Broj strana</label>
+              {errors.brStrana && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.brStrana}</div>}
             </div>
 
             <div className="floating-label-group">
-              <select name="vrstaPisma" id="vrstaPisma" value={formData.vrstaPisma} onChange={handleChange}>
+              <select name="pismo" id="pismo" value={formData.pismo} onChange={handleChange}>
                 <option value="">Izaberite vrstu pisma</option>
-                <option value="Ćirilica">Ćirilica</option>
-                <option value="Latinica">Latinica</option>
+                <option value="1">Ćirilica</option>
+                <option value="2">Latinica</option>
               </select>
-              <label htmlFor="vrstaPisma">Vrsta pisma</label>
-              {errors.vrstaPisma && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.vrstaPisma}</div>}
+              <label htmlFor="pismo">Vrsta pisma</label>
+              {errors.pismo && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.pismo}</div>}
             </div>
 
             <div className="floating-label-group">
-              <select name="vrstaPoveza" id="vrstaPoveza" value={formData.vrstaPoveza} onChange={handleChange}>
+              <select name="jezik" id="jezik" value={formData.jezik} onChange={handleChange}>
+                <option value="">Izaberite jezik</option>
+                <option value="1">Srpski</option>
+                <option value="2">Engleski</option>
+                <option value="3">Njemački</option>
+                <option value="4">Francuski</option>
+              </select>
+              <label htmlFor="jezik">Jezik</label>
+              {errors.jezik && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.jezik}</div>}
+            </div>
+
+            <div className="floating-label-group">
+              <select name="povez" id="povez" value={formData.povez} onChange={handleChange}>
                 <option value="">Izaberite vrstu poveza</option>
-                <option value="Tvrdi">Tvrdi</option>
-                <option value="Meki">Meki</option>
+                <option value="1">Tvrdi</option>
+                <option value="2">Meki</option>
               </select>
-              <label htmlFor="vrstaPoveza">Vrsta poveza</label>
-              {errors.vrstaPoveza && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.vrstaPoveza}</div>}
+              <label htmlFor="povez">Vrsta poveza</label>
+              {errors.povez && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.povez}</div>}
             </div>
 
             <div className="floating-label-group">
-              <select name="vrstaFormata" id="vrstaFormata" value={formData.vrstaFormata} onChange={handleChange}>
+              <select name="format" id="format" value={formData.format} onChange={handleChange}>
                 <option value="">Izaberite vrstu formata</option>
-                <option value="A4">A4</option>
-                <option value="B5">B5</option>
-                <option value="A5">A5</option>
-                <option value="Pocket">Pocket</option>
+                <option value="1">A4</option>
+                <option value="2">B5</option>
+                <option value="3">A5</option>
+                <option value="4">Pocket</option>
               </select>
-              <label htmlFor="vrstaFormata">Vrsta formata</label>
-              {errors.vrstaFormata && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.vrstaFormata}</div>}
+              <label htmlFor="format">Vrsta formata</label>
+              {errors.format && <div style={{ color: 'red', fontSize: '0.9em' }}>{errors.format}</div>}
             </div>
 
             <div className="floating-label-group">
@@ -454,7 +476,7 @@ const NovaKnjiga = () => {
                     type="button" 
                     onClick={() => {
                       setSlika(null);
-                      setFormData(prev => ({ ...prev, photoPath: '' }));
+                      setPictures([]);
                       if (fileInputRef.current) {
                         fileInputRef.current.value = '';
                       }
