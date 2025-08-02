@@ -18,6 +18,7 @@ const KnjigaPrikaz = () => {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('osnovni');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [evidencijaTab, setEvidencijaTab] = useState('izdateKnjige');
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -79,6 +80,43 @@ const KnjigaPrikaz = () => {
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+
+  // Dummy data for lending records
+  const dummyIssuedBooks = [
+    { id: 1, student: 'Pero Perovic', issueDate: '21.02.2021', duration: '2 nedjelja i 3 dana', currentHolder: 'Valentina Kascelan' },
+    { id: 2, student: 'Pero Perovic', issueDate: '15.05.2020', duration: '5 dana', currentHolder: 'Valentina Kascelan' },
+    { id: 3, student: 'Pero Perovic', issueDate: '12.05.2020', duration: '1 nedjelja i 4 dana', currentHolder: 'Valentina Kascelan' },
+    { id: 4, student: 'Pero Perovic', issueDate: '09.04.2020', duration: '1 mjesec i 3 dana', currentHolder: 'Valentina Kascelan' },
+    { id: 5, student: 'Pero Perovic', issueDate: '21.02.2021', duration: '3 mjeseca i 2 nedjelje', currentHolder: 'Valentina Kascelan' }
+  ];
+
+  const dummyReturnedBooks = [
+    { id: 1, student: 'Pero Perovic', issueDate: '21.02.2021', returnDate: '29.02.2021', duration: '2 nedjelja i 3 dana', recipient: 'Valentina Kascelan' },
+    { id: 2, student: 'Pero Perovic', issueDate: '15.05.2020', returnDate: '15.05.2020', duration: '5 dana', recipient: 'Valentina Kascelan' },
+    { id: 3, student: 'Pero Perovic', issueDate: '12.05.2020', returnDate: '12.05.2020', duration: '1 nedjelja i 4 dana', recipient: 'Valentina Kascelan' },
+    { id: 4, student: 'Pero Perovic', issueDate: '09.04.2020', returnDate: '09.04.2020', duration: '7 nedjelja i 6 dana', recipient: 'Valentina Kascelan' }
+  ];
+
+  const dummyOverdueBooks = [
+    { id: 1, issueDate: '01.01.2021', student: 'Pero Perovic', overdueDays: 25, duration: '3 mjeseca i 3 dana' },
+    { id: 2, issueDate: '01.01.2021', student: 'Pero Perovic', overdueDays: 34, duration: '2 mjeseca i 2 nedjelje' },
+    { id: 3, issueDate: '01.01.2021', student: 'Pero Perovic', overdueDays: 55, duration: '2 mjeseca i 2 nedjelje' },
+    { id: 4, issueDate: '01.01.2021', student: 'Pero Perovic', overdueDays: 43, duration: '1 mjesec i 2 nedjelje' }
+  ];
+
+  const dummyActiveReservations = [
+    { id: 1, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Rezervacija' },
+    { id: 2, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Rezervacija' },
+    { id: 3, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Odbijeno' },
+    { id: 4, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Odbijeno' }
+  ];
+
+  const dummyArchivedReservations = [
+    { id: 1, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Izdato' },
+    { id: 2, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Izdato' },
+    { id: 3, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Rezervacija istekla' },
+    { id: 4, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Rezervacija istekla' }
+  ];
 
   if (!book) return (
     <div>
@@ -283,7 +321,251 @@ const KnjigaPrikaz = () => {
 
             {activeTab === 'evidencija' && (
               <div className="evidencija-tab">
-                <p>Evidencija iznajmljivanja će biti implementirana uskoro.</p>
+                <div className="evidencija-layout">
+                  <div className="evidencija-sidebar">
+                    <button 
+                      className={`sidebar-nav-btn ${evidencijaTab === 'izdateKnjige' ? 'active' : ''}`}
+                      onClick={() => setEvidencijaTab('izdateKnjige')}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                      </svg>
+                      Izdate knjige
+                    </button>
+                    <button 
+                      className={`sidebar-nav-btn ${evidencijaTab === 'vracenjeKnjige' ? 'active' : ''}`}
+                      onClick={() => setEvidencijaTab('vracenjeKnjige')}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/>
+                      </svg>
+                      Vracenje knjige
+                    </button>
+                    <button 
+                      className={`sidebar-nav-btn ${evidencijaTab === 'knjigeUPrekoracenju' ? 'active' : ''}`}
+                      onClick={() => setEvidencijaTab('knjigeUPrekoracenju')}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m-2 15l-5-5l1.41-1.41L10 14.17l7.59-7.59L19 8z"/>
+                      </svg>
+                      Knjige u prekoračenju
+                    </button>
+                    <button 
+                      className={`sidebar-nav-btn ${evidencijaTab === 'aktivneRezervacije' ? 'active' : ''}`}
+                      onClick={() => setEvidencijaTab('aktivneRezervacije')}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M9 11H7v6h2zm4 0h-2v6h2zm4 0h-2v6h2zm2-7h-3V2h-2v2H8V2H6v2H3v2h18zM3 7v12c0 1.1.9 2 2 2h14c0 1.1.9 2 2 2V7z"/>
+                      </svg>
+                      Aktivne rezervacije
+                    </button>
+                    <button 
+                      className={`sidebar-nav-btn ${evidencijaTab === 'arhiviraneRezervacije' ? 'active' : ''}`}
+                      onClick={() => setEvidencijaTab('arhiviraneRezervacije')}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/>
+                      </svg>
+                      Arhivirane rezervacije
+                    </button>
+                  </div>
+
+                  <div className="evidencija-content">
+                    {evidencijaTab === 'izdateKnjige' && (
+                      <div className="data-table-container">
+                        <table className="data-table">
+                          <thead>
+                            <tr>
+                              <th>
+                                <input type="checkbox" />
+                              </th>
+                              <th>Izdato učeniku <span className="sort-arrow">↓</span></th>
+                              <th>Datum izdavanja <span className="sort-arrow">▼</span></th>
+                              <th>Trenutno zadržavanje knjige <span className="sort-arrow">▼</span></th>
+                              <th>Knjigu zadao <span className="sort-arrow">▼</span></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {dummyIssuedBooks.map((record) => (
+                              <tr key={record.id}>
+                                <td><input type="checkbox" /></td>
+                                <td>{record.student}</td>
+                                <td>{record.issueDate}</td>
+                                <td>{record.duration}</td>
+                                <td>{record.currentHolder}</td>
+                                <td>
+                                  <button className="action-dots">⋮</button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {evidencijaTab === 'vracenjeKnjige' && (
+                      <div className="data-table-container">
+                        <table className="data-table">
+                          <thead>
+                            <tr>
+                              <th>
+                                <input type="checkbox" />
+                              </th>
+                              <th>Izdato učeniku <span className="sort-arrow">▼</span></th>
+                              <th>Datum izdavanja <span className="sort-arrow">▼</span></th>
+                              <th>Datum vraćanja <span className="sort-arrow">▼</span></th>
+                              <th>Zadržavanje knjige <span className="sort-arrow">▼</span></th>
+                              <th>Knjige primio <span className="sort-arrow">▼</span></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {dummyReturnedBooks.map((record) => (
+                              <tr key={record.id}>
+                                <td><input type="checkbox" /></td>
+                                <td>{record.student}</td>
+                                <td>{record.issueDate}</td>
+                                <td>{record.returnDate}</td>
+                                <td>{record.duration}</td>
+                                <td>{record.recipient}</td>
+                                <td>
+                                  <button className="action-dots">⋮</button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {evidencijaTab === 'knjigeUPrekoracenju' && (
+                      <div className="data-table-container">
+                        <table className="data-table">
+                          <thead>
+                            <tr>
+                              <th>
+                                <input type="checkbox" />
+                              </th>
+                              <th>Datum izdavanja <span className="sort-arrow">▼</span></th>
+                              <th>Izdato učeniku <span className="sort-arrow">▼</span></th>
+                              <th>Prekoračenje u danima <span className="sort-arrow">▼</span></th>
+                              <th>Trenutno zadržavanje knjige <span className="sort-arrow">▼</span></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {dummyOverdueBooks.map((record) => (
+                              <tr key={record.id}>
+                                <td><input type="checkbox" /></td>
+                                <td>{record.issueDate}</td>
+                                <td>{record.student}</td>
+                                <td className="overdue-days">{record.overdueDays}</td>
+                                <td>{record.duration}</td>
+                                <td>
+                                  <button className="action-dots">⋮</button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {evidencijaTab === 'aktivneRezervacije' && (
+                      <div className="data-table-container">
+                        <table className="data-table">
+                          <thead>
+                            <tr>
+                              <th>
+                                <input type="checkbox" />
+                              </th>
+                              <th>Datum rezervacije <span className="sort-arrow">▼</span></th>
+                              <th>Rezervacija istice <span className="sort-arrow">▼</span></th>
+                              <th>Rezervaciju podio <span className="sort-arrow">▼</span></th>
+                              <th>Status <span className="sort-arrow">▼</span></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {dummyActiveReservations.map((record) => (
+                              <tr key={record.id}>
+                                <td><input type="checkbox" /></td>
+                                <td>{record.reservationDate}</td>
+                                <td>10.02.2021</td>
+                                <td>
+                                  <div className="user-info">
+                                    <img src="/src/Dashboard/slike/ivan.jpg" alt="User" className="user-avatar" />
+                                    {record.reservedBy}
+                                  </div>
+                                </td>
+                                <td>
+                                  <span className={`status-badge ${record.status === 'Rezervacija' ? 'reserved' : 'rejected'}`}>
+                                    {record.status}
+                                  </span>
+                                </td>
+                                <td>
+                                  <button className="action-dots">⋮</button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {evidencijaTab === 'arhiviraneRezervacije' && (
+                      <div className="data-table-container">
+                        <table className="data-table">
+                          <thead>
+                            <tr>
+                              <th>
+                                <input type="checkbox" />
+                              </th>
+                              <th>Datum rezervacije <span className="sort-arrow">▼</span></th>
+                              <th>Rezervacija istice <span className="sort-arrow">▼</span></th>
+                              <th>Rezervaciju podio <span className="sort-arrow">▼</span></th>
+                              <th>Status <span className="sort-arrow">▼</span></th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {dummyArchivedReservations.map((record) => (
+                              <tr key={record.id}>
+                                <td><input type="checkbox" /></td>
+                                <td>{record.reservationDate}</td>
+                                <td>{record.completionDate}</td>
+                                <td>
+                                  <div className="user-info">
+                                    <img src="/src/Dashboard/slike/ivan.jpg" alt="User" className="user-avatar" />
+                                    {record.reservedBy}
+                                  </div>
+                                </td>
+                                <td>
+                                  <span className={`status-badge ${record.status === 'Izdato' ? 'issued' : 'expired'}`}>
+                                    {record.status}
+                                  </span>
+                                </td>
+                                <td>
+                                  <button className="action-dots">⋮</button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    <div className="table-footer">
+                      <span>Rows per page: 20 ▼</span>
+                      <span>1 of 1</span>
+                      <div className="pagination">
+                        <button>‹</button>
+                        <button>›</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
