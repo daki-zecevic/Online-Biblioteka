@@ -21,6 +21,8 @@ const KnjigaPrikaz = () => {
   const [evidencijaTab, setEvidencijaTab] = useState('izdateKnjige');
   const [borrowsData, setBorrowsData] = useState([]);
   const [borrowsLoading, setBorrowsLoading] = useState(false);
+  const [reservationsData, setReservationsData] = useState([]);
+  const [reservationsLoading, setReservationsLoading] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -84,9 +86,31 @@ const KnjigaPrikaz = () => {
     }
   };
 
+  const fetchAllReservations = async () => {
+    setReservationsLoading(true);
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch('https://biblioteka.simonovicp.com/api/books/reservations', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
+      });
+      const data = await response.json();
+     
+      setReservationsData(Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : []);
+    } catch (error) {
+      toast.error('Greška pri dohvatanju podataka o rezervacijama.');
+      setReservationsData([]); 
+    } finally {
+      setReservationsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'evidencija') {
       fetchAllBorrows();
+      fetchAllReservations();
     }
   }, [activeTab]);
 
@@ -129,7 +153,7 @@ const KnjigaPrikaz = () => {
       const data = await response.json();
       if (data.success) {
         toast.success('Knjige su uspešno otpisane.');
-        // Refresh data
+       
         fetchBook();
       } else {
         toast.error('Greška pri otpisu knjiga.');
@@ -210,7 +234,7 @@ const KnjigaPrikaz = () => {
       const data = await response.json();
       if (data.success) {
         toast.success('Knjige su uspešno vraćene.');
-        // Refresh data
+       
         fetchBook();
       } else {
         toast.error('Greška pri vraćanju knjiga.');
@@ -221,13 +245,66 @@ const KnjigaPrikaz = () => {
     }
   };
 
-  const handleReserve = () => {
-    toast.info('Opcija "Rezerviši knjigu" će biti implementirana uskoro.');
+  const handleReserve = async () => {
+    const studentId = prompt('Unesite ID učenika:');
+    if (!studentId) return;
+    
+    const datumRezervisanja = prompt('Unesite datum rezervisanja (MM/DD/YYYY):');
+    if (!datumRezervisanja) return;
+
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch(`https://biblioteka.simonovicp.com/api/books/${id}/reserve`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          student_id: parseInt(studentId),
+          datumRezervisanja
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Knjiga je uspešno rezervisana.');
+        // Refresh reservations data
+        fetchAllReservations();
+      } else {
+        toast.error('Greška pri rezervisanju knjige.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Greška pri povezivanju sa serverom.');
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm('Da li ste sigurni da želite da obrišete ovu knjigu?')) {
-      toast.info('Opcija "Obriši knjigu" će biti implementirana uskoro.');
+      const token = localStorage.getItem('authToken');
+      try {
+        const response = await fetch(`https://biblioteka.simonovicp.com/api/books/${id}/destroy`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+        if (data.success || response.ok) {
+          toast.success('Knjiga je uspešno obrisana.');
+          // Navigate back to books list
+          navigate('/dashboard/knjige');
+        } else {
+          toast.error('Greška pri brisanju knjige.');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Greška pri povezivanju sa serverom.');
+      }
     }
   };
 
@@ -260,23 +337,69 @@ const KnjigaPrikaz = () => {
     }
   };
 
+  const cancelReservation = async (reservationId) => {
+    if (!window.confirm('Da li ste sigurni da želite da otkažete ovu rezervaciju?')) {
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch('https://biblioteka.simonovicp.com/api/books/reservations/cancel', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ reservation_id: reservationId })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Rezervacija je uspešno otkazana.');
+        // Refresh data
+        fetchAllReservations();
+      } else {
+        toast.error('Greška pri otkazivanju rezervacije.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Greška pri povezivanju sa serverom.');
+    }
+  };
+
+  const deleteReservationRecord = async (reservationId) => {
+    if (!window.confirm('Da li ste sigurni da želite da obrišete ovaj zapis rezervacije?')) {
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch(`https://biblioteka.simonovicp.com/api/books/reservations/${reservationId}/destroy`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Zapis rezervacije je uspešno obrisan.');
+        // Refresh data
+        fetchAllReservations();
+      } else {
+        toast.error('Greška pri brisanju zapisa rezervacije.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Greška pri povezivanju sa serverom.');
+    }
+  };
+
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
-
-  const dummyActiveReservations = [
-    { id: 1, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Rezervacija' },
-    { id: 2, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Rezervacija' },
-    { id: 3, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Odbijeno' },
-    { id: 4, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', status: 'Odbijeno' }
-  ];
-
-  const dummyArchivedReservations = [
-    { id: 1, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Izdato' },
-    { id: 2, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Izdato' },
-    { id: 3, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Rezervacija istekla' },
-    { id: 4, reservationDate: '01.01.2021', reservedBy: 'Pero Perovic', completionDate: '10.02.2021', status: 'Rezervacija istekla' }
-  ];
 
   if (!book) return (
     <div>
@@ -699,85 +822,127 @@ const KnjigaPrikaz = () => {
 
                     {evidencijaTab === 'aktivneRezervacije' && (
                       <div className="data-table-container">
-                        <table className="data-table">
-                          <thead>
-                            <tr>
-                              <th>
-                                <input type="checkbox" />
-                              </th>
-                              <th>Datum rezervacije <span className="sort-arrow">▼</span></th>
-                              <th>Rezervacija istice <span className="sort-arrow">▼</span></th>
-                              <th>Rezervaciju podio <span className="sort-arrow">▼</span></th>
-                              <th>Status <span className="sort-arrow">▼</span></th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {dummyActiveReservations.map((record) => (
-                              <tr key={record.id}>
-                                <td><input type="checkbox" /></td>
-                                <td>{record.reservationDate}</td>
-                                <td>10.02.2021</td>
-                                <td>
-                                  <div className="user-info">
-                                    <img src="/src/Dashboard/slike/ivan.jpg" alt="User" className="user-avatar" />
-                                    {record.reservedBy}
-                                  </div>
-                                </td>
-                                <td>
-                                  <span className={`status-badge ${record.status === 'Rezervacija' ? 'reserved' : 'rejected'}`}>
-                                    {record.status}
-                                  </span>
-                                </td>
-                                <td>
-                                  <button className="action-dots">⋮</button>
-                                </td>
+                        {reservationsLoading ? (
+                          <div>Učitavanje podataka...</div>
+                        ) : (
+                          <table className="data-table">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <input type="checkbox" />
+                                </th>
+                                <th>Datum rezervacije <span className="sort-arrow">▼</span></th>
+                                <th>Rezervacija istice <span className="sort-arrow">▼</span></th>
+                                <th>Rezervaciju podio <span className="sort-arrow">▼</span></th>
+                                <th>Status <span className="sort-arrow">▼</span></th>
+                                <th></th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody>
+                              {Array.isArray(reservationsData) && reservationsData.filter(record => record.book_id === id && !record.completed_at).map((record) => (
+                                <tr key={record.id}>
+                                  <td><input type="checkbox" /></td>
+                                  <td>{record.reserved_at || record.datumRezervisanja}</td>
+                                  <td>{record.expires_at || record.datumIsteka}</td>
+                                  <td>
+                                    <div className="user-info">
+                                      <img src="/src/Dashboard/slike/ivan.jpg" alt="User" className="user-avatar" />
+                                      {record.student?.name || record.student_name || 'N/A'}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span className={`status-badge ${record.status === 'Rezervacija' ? 'reserved' : 'rejected'}`}>
+                                      {record.status || 'Rezervacija'}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <div className="dropdown-container">
+                                      <button className="action-dots" onClick={(e) => {
+                                        e.stopPropagation();
+                                        const dropdown = e.target.nextElementSibling;
+                                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                                      }}>⋮</button>
+                                      <div className="dropdown-menu" style={{ display: 'none' }}>
+                                        <button className="dropdown-item" onClick={() => cancelReservation(record.id)}>
+                                          <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m5 11H7v-2h10z"></path>
+                                          </svg>
+                                          Otkaži rezervaciju
+                                        </button>
+                                        <button className="dropdown-item" onClick={() => deleteReservationRecord(record.id)}>
+                                          <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"></path>
+                                          </svg>
+                                          Obriši zapis
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        )}
                       </div>
                     )}
 
                     {evidencijaTab === 'arhiviraneRezervacije' && (
                       <div className="data-table-container">
-                        <table className="data-table">
-                          <thead>
-                            <tr>
-                              <th>
-                                <input type="checkbox" />
-                              </th>
-                              <th>Datum rezervacije <span className="sort-arrow">▼</span></th>
-                              <th>Rezervacija istice <span className="sort-arrow">▼</span></th>
-                              <th>Rezervaciju podio <span className="sort-arrow">▼</span></th>
-                              <th>Status <span className="sort-arrow">▼</span></th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {dummyArchivedReservations.map((record) => (
-                              <tr key={record.id}>
-                                <td><input type="checkbox" /></td>
-                                <td>{record.reservationDate}</td>
-                                <td>{record.completionDate}</td>
-                                <td>
-                                  <div className="user-info">
-                                    <img src="/src/Dashboard/slike/ivan.jpg" alt="User" className="user-avatar" />
-                                    {record.reservedBy}
-                                  </div>
-                                </td>
-                                <td>
-                                  <span className={`status-badge ${record.status === 'Izdato' ? 'issued' : 'expired'}`}>
-                                    {record.status}
-                                  </span>
-                                </td>
-                                <td>
-                                  <button className="action-dots">⋮</button>
-                                </td>
+                        {reservationsLoading ? (
+                          <div>Učitavanje podataka...</div>
+                        ) : (
+                          <table className="data-table">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <input type="checkbox" />
+                                </th>
+                                <th>Datum rezervacije <span className="sort-arrow">▼</span></th>
+                                <th>Rezervacija istice <span className="sort-arrow">▼</span></th>
+                                <th>Rezervaciju podio <span className="sort-arrow">▼</span></th>
+                                <th>Status <span className="sort-arrow">▼</span></th>
+                                <th></th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody>
+                              {Array.isArray(reservationsData) && reservationsData.filter(record => record.book_id === id && record.completed_at).map((record) => (
+                                <tr key={record.id}>
+                                  <td><input type="checkbox" /></td>
+                                  <td>{record.reserved_at || record.datumRezervisanja}</td>
+                                  <td>{record.completed_at || record.datumZavrsetka}</td>
+                                  <td>
+                                    <div className="user-info">
+                                      <img src="/src/Dashboard/slike/ivan.jpg" alt="User" className="user-avatar" />
+                                      {record.student?.name || record.student_name || 'N/A'}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span className={`status-badge ${record.status === 'Izdato' ? 'issued' : 'expired'}`}>
+                                      {record.status || 'Rezervacija istekla'}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <div className="dropdown-container">
+                                      <button className="action-dots" onClick={(e) => {
+                                        e.stopPropagation();
+                                        const dropdown = e.target.nextElementSibling;
+                                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                                      }}>⋮</button>
+                                      <div className="dropdown-menu" style={{ display: 'none' }}>
+                                        <button className="dropdown-item" onClick={() => deleteReservationRecord(record.id)}>
+                                          <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"></path>
+                                          </svg>
+                                          Obriši zapis
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        )}
                       </div>
                     )}
 

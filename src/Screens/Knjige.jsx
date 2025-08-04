@@ -71,19 +71,162 @@ const Knjige = () => {
     setShowDeleteModal(true);
   };
 
-  const handleWriteOff = (id) => {
+  const handleWriteOff = async (id) => {
     setMenuOpenId(null);
-    toast.info('Opcija "Otpiši knjigu" će biti implementirana uskoro.');
+    const borrowIds = prompt('Unesite ID-jeve izdavanja za otpis (odvojene zarezom):');
+    if (!borrowIds) return;
+    
+    const toWriteoff = borrowIds.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+    
+    if (toWriteoff.length === 0) {
+      toast.error('Molimo unesite validne ID-jeve.');
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    try {
+      setLoading(true);
+      const response = await fetch('https://biblioteka.simonovicp.com/api/books/otpisi', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ toWriteoff })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Knjige su uspešno otpisane.');
+      } else {
+        toast.error('Greška pri otpisu knjiga.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Greška pri povezivanju sa serverom.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleReturn = (id) => {
+  const handleReturn = async (id) => {
     setMenuOpenId(null);
-    toast.info('Opcija "Vrati knjigu" će biti implementirana uskoro.');
+    const borrowIds = prompt('Unesite ID-jeve izdavanja za vraćanje (odvojene zarezom):');
+    if (!borrowIds) return;
+    
+    const toReturn = borrowIds.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+    
+    if (toReturn.length === 0) {
+      toast.error('Molimo unesite validne ID-jeve.');
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    try {
+      setLoading(true);
+      const response = await fetch('https://biblioteka.simonovicp.com/api/books/vrati', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ toReturn })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Knjige su uspešno vraćene.');
+      } else {
+        toast.error('Greška pri vraćanju knjiga.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Greška pri povezivanju sa serverom.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleReserve = (id) => {
+  const handleReserve = async (id) => {
     setMenuOpenId(null);
-    toast.info('Opcija "Rezerviši knjigu" će biti implementirana uskoro.');
+    const studentId = prompt('Unesite ID učenika:');
+    if (!studentId) return;
+    
+    const datumRezervisanja = prompt('Unesite datum rezervisanja (MM/DD/YYYY):');
+    if (!datumRezervisanja) return;
+
+    const token = localStorage.getItem('authToken');
+    try {
+      setLoading(true);
+      const response = await fetch(`https://biblioteka.simonovicp.com/api/books/${id}/reserve`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          student_id: parseInt(studentId),
+          datumRezervisanja
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Knjiga je uspešno rezervisana.');
+      } else {
+        toast.error('Greška pri rezervisanju knjige.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Greška pri povezivanju sa serverom.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleIssueBook = async (id) => {
+    setMenuOpenId(null);
+    const studentId = prompt('Unesite ID učenika:');
+    if (!studentId) return;
+    
+    const datumIzdavanja = prompt('Unesite datum izdavanja (MM/DD/YYYY):');
+    if (!datumIzdavanja) return;
+    
+    const datumVracanja = prompt('Unesite datum vraćanja (MM/DD/YYYY):');
+    if (!datumVracanja) return;
+
+    const token = localStorage.getItem('authToken');
+    try {
+      setLoading(true);
+      const response = await fetch(`https://biblioteka.simonovicp.com/api/books/${id}/izdaj`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          student_id: parseInt(studentId),
+          datumIzdavanja,
+          datumVracanja
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Knjiga je uspešno izdata.');
+      } else {
+        toast.error('Greška pri izdavanju knjige.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Greška pri povezivanju sa serverom.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -221,6 +364,12 @@ const Knjige = () => {
                           <path fill="currentColor" fillRule="evenodd" d="M8.08.1c.19-.06.39-.09.59-.09L8.66 0c.2 0 .4.03.59.09c.43.14.72.43 1.14.849l.67.669c.43.42.71.709.85 1.14c.12.39.12.799 0 1.18c-.14.43-.43.719-.85 1.14l-5.46 5.46c-.12.13-.21.22-.34.31c-.11.08-.23.15-.36.2a2.5 2.5 0 0 1-.429.127l-.01.002l-3.22.81c-.08.03-.16.03-.24.03c-.26 0-.52-.1-.71-.29a.98.98 0 0 1-.26-.95l.81-3.22l.002-.01c.039-.165.069-.292.128-.43c.05-.13.12-.25.2-.36c.09-.12.19-.22.31-.34L6.94.948C7.37.518 7.65.24 8.08.1m.87.949a.9.9 0 0 0-.28-.04v.01c-.1 0-.19.01-.28.04c-.2.06-.38.24-.74.6l-.642.642l2.7 2.7l.649-.648l.094-.097c.288-.295.442-.453.506-.643c.06-.18.06-.38 0-.56c-.06-.2-.24-.38-.6-.739l-.67-.669l-.096-.094c-.296-.288-.453-.442-.643-.505zm.054 4.66l-2.7-2.7l-4.1 4.11q-.056.062-.098.104a.9.9 0 0 0-.202.286c-.019.037-.03.082-.045.143q-.013.057-.035.136l-.81 3.22l3.22-.81c.14-.03.21-.05.28-.079c.06-.03.12-.06.17-.1c.06-.04.11-.09.22-.2l4.1-4.1z" clipRule="evenodd"></path>
                         </svg>
                         Izmijeni Knjigu
+                      </button>
+                      <button className="admin-list-dropdown-btn" onClick={() => handleIssueBook(book.id)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width={12} height={12} viewBox="0 0 12 12" style={{ marginRight: '8px' }}>
+                          <path fill="currentColor" fillRule="evenodd" d="M8.08.1c.19-.06.39-.09.59-.09L8.66 0c.2 0 .4.03.59.09c.43.14.72.43 1.14.849l.67.669c.43.42.71.709.85 1.14c.12.39.12.799 0 1.18c-.14.43-.43.719-.85 1.14l-5.46 5.46c-.12.13-.21.22-.34.31c-.11.08-.23.15-.36.2a2.5 2.5 0 0 1-.429.127l-.01.002l-3.22.81c-.08.03-.16.03-.24.03c-.26 0-.52-.1-.71-.29a.98.98 0 0 1-.26-.95l.81-3.22l.002-.01c.039-.165.069-.292.128-.43c.05-.13.12-.25.2-.36c.09-.12.19-.22.31-.34L6.94.948C7.37.518 7.65.24 8.08.1m.87.949a.9.9 0 0 0-.28-.04v.01c-.1 0-.19.01-.28.04c-.2.06-.38.24-.74.6l-.642.642l2.7 2.7l.649-.648l.094-.097c.288-.295.442-.453.506-.643c.06-.18.06-.38 0-.56c-.06-.2-.24-.38-.6-.739l-.67-.669l-.096-.094c-.296-.288-.453-.442-.643-.505zm.054 4.66l-2.7-2.7l-4.1 4.11q-.056.062-.098.104a.9.9 0 0 0-.202.286c-.019.037-.03.082-.045.143q-.013.057-.035.136l-.81 3.22l3.22-.81c.14-.03.21-.05.28-.079c.06-.03.12-.06.17-.1c.06-.04.11-.09.22-.2l4.1-4.1z" clipRule="evenodd"></path>
+                        </svg>
+                        Izdaj Knjigu
                       </button>
                       <button className="admin-list-dropdown-btn" onClick={() => handleWriteOff(book.id)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 2048 2048" style={{ marginRight: '8px' }}>
