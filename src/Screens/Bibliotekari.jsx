@@ -3,48 +3,7 @@ import '../Styles/Bibliotekari.css';
 import { useNavigate } from 'react-router';
 import BibliotekarMeni from '../Dashboard/komponente/BibliotekarMeni';
 
-const dummyData = [
-  {
-    id: 1,
-    name: 'Valentina Kascelan',
-    email: 'valentina.kascelan@domain.net',
-    type: 'Bibliotekar',
-    lastAccess: 'Prije 10 sati',
-    avatar: 'https://i.pravatar.cc/40?img=1',
-  },
-  {
-    id: 2,
-    name: 'Tarik Zaimovic',
-    email: 'tarik.zaimovic@domain.net',
-    type: 'Bibliotekar',
-    lastAccess: 'Prije 2 dana',
-    avatar: 'https://i.pravatar.cc/40?img=2',
-  },
-  {
-    id: 3,
-    name: 'Test Akontacijevic',
-    email: 'test.akontijevic@domain.net',
-    type: 'Bibliotekar',
-    lastAccess: 'Nije se nikad ulogovao',
-    avatar: 'https://i.pravatar.cc/40?img=3',
-  },
-  {
-    id: 4,
-    name: 'Darko Kascelan',
-    email: 'darko.kascelan@domain.net',
-    type: 'Bibliotekar',
-    lastAccess: 'Prije 2 nedelje',
-    avatar: 'https://i.pravatar.cc/40?img=4',
-  },
-  {
-    id: 5,
-    name: 'Marko Markovic',
-    email: 'marko.markovic@domain.net',
-    type: 'Bibliotekar',
-    lastAccess: 'Prije 3 dana',
-    avatar: 'https://i.pravatar.cc/40?img=5',
-  },
-];
+const API_BASE = 'http://localhost:8000'; 
 
 const Bibliotekari = () => {
   const navigate = useNavigate();
@@ -61,33 +20,51 @@ const Bibliotekari = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+useEffect(() => {
+  const fetchBibliotekari = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:8000/api/users', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-  useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem('bibliotekari')) || [];
-    const formatted = localData.map((b, index) => ({
-      id: dummyData.length + index + 1,
-      name: `${b.ime} ${b.prezime}`,
-      email: b.email,
-      type: 'Bibliotekar',
-      lastAccess: 'Nije se nikad ulogovao',
-      avatar: b.slika || 'https://i.pravatar.cc/40?u=' + (dummyData.length + index + 1)
-    }));
-    setBibliotekari([...dummyData, ...formatted]);
-  }, []);
+      if (!res.ok) {
+        throw new Error('Neuspješno dohvaćanje bibliotekara');
+      }
+
+      const data = await res.json();
+
+      // Formatiraj podatke kako treba za prikaz
+      const formatted = data.map((b, index) => ({
+        id: b.id,
+        name: `${b.name} ${b.last_name}`,
+        email: b.email,
+        type: 'Bibliotekar',
+        lastAccess: b.last_login || 'Nije se nikad ulogovao',
+        avatar: b.image || `https://i.pravatar.cc/40?u=${b.id}`
+      }));
+
+      setBibliotekari(formatted);
+    } catch (err) {
+      console.error('Greška pri dohvaćanju bibliotekara:', err);
+    }
+  };
+
+  fetchBibliotekari();
+}, []);
+
 
   const obrisiBibliotekara = (id) => {
-    const novi = bibliotekari.filter((b) => b.id !== id);
-    setBibliotekari(novi);
-
-    const originalni = JSON.parse(localStorage.getItem('bibliotekari')) || [];
-    const noviLokalni = originalni.filter((_, index) => dummyData.length + index + 1 !== id);
-    localStorage.setItem('bibliotekari', JSON.stringify(noviLokalni));
+    setBibliotekari(prev => prev.filter((b) => b.id !== id));
   };
 
   return (
     <div className="bibliotekari-container">
       <div className="bibliotekari-header">
-        <button  className="add-btn-U" onClick={() => navigate('/dashboard/bibliotekari/n')}>
+        <button className="add-btn-U" onClick={() => navigate('/dashboard/bibliotekari/n')}>
           + NOVI BIBLIOTEKAR
         </button>
         <input type="text" placeholder="Search..." className="search-input" />
@@ -106,37 +83,35 @@ const Bibliotekari = () => {
         </thead>
         <tbody>
           {bibliotekari.map((user) => (
-            <React.Fragment key={user.id}>
-              <tr>
-                <td><input type="checkbox" /></td>
-                <td className="name-cell">
-                  <img src={user.avatar} alt={user.name} className="avatar" />
-                  {user.name}
-                </td>
-                <td>{user.email}</td>
-                <td>{user.type}</td>
-                <td>{user.lastAccess}</td>
-                <td style={{ position: 'relative' }}>
-                  <button
-                    className="menu-dots"
-                    onClick={() =>
-                      setOpenMeniId((prev) => (prev === user.id ? null : user.id))
-                    }
-                  >
-                    ⋮
-                  </button>
-                  {openMeniId === user.id && (
-                    <div ref={meniRef} className="menu-wrapper">
-                      <BibliotekarMeni
-                        id={user.id}
-                        onClose={() => setOpenMeniId(null)}
-                        onBrisi={obrisiBibliotekara}
-                      />
-                    </div>
-                  )}
-                </td>
-              </tr>
-            </React.Fragment>
+            <tr key={user.id}>
+              <td><input type="checkbox" /></td>
+              <td className="name-cell">
+                <img src={user.avatar} alt={user.name} className="avatar" />
+                {user.name}
+              </td>
+              <td>{user.email}</td>
+              <td>{user.type}</td>
+              <td>{user.lastAccess}</td>
+              <td style={{ position: 'relative' }}>
+                <button
+                  className="menu-dots"
+                  onClick={() =>
+                    setOpenMeniId((prev) => (prev === user.id ? null : user.id))
+                  }
+                >
+                  ⋮
+                </button>
+                {openMeniId === user.id && (
+                  <div ref={meniRef} className="menu-wrapper">
+                    <BibliotekarMeni
+                      id={user.id}
+                      onClose={() => setOpenMeniId(null)}
+                      onBrisi={obrisiBibliotekara}
+                    />
+                  </div>
+                )}
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
